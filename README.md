@@ -27,3 +27,4 @@ To create the project, I used:
 * Pixel Map Generator by amCharts
 * Chart by Chart.js
 * Chart zoom by Chart.js
+* Count up animation by inorganik
