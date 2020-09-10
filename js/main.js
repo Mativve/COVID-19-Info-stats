@@ -80,11 +80,11 @@ async function set_single_country_stats(slug){
         timeline.splice(-1, 1);
     });
     
-    console.clear();
-    console.log("info", info);
-    console.log("total", total);
-    console.log("timeline", timeline);
-    console.log("days", days);
+    // console.clear();
+    // console.log("info", info);
+    // console.log("total", total);
+    // console.log("timeline", timeline);
+    // console.log("days", days);
 
     // Ustawienie danych (nazwa, flaga)
     country_name.innerText = (info.title) ? info.title : "N/D";
@@ -205,7 +205,7 @@ let acl_next = document.querySelectorAll('[data-next="infected-list"]');
 let acl_paged = document.querySelectorAll('[data-paged="infected-list"]');
 
 function acl_set_paginate(){
-    console.log("acl paginate", acl_page);
+    // console.log("acl paginate", acl_page);
 
     let paginated = paginate_array({
         page: acl_page,
@@ -301,7 +301,7 @@ stats.then(data => {
 
     STATS.countries.splice((STATS.countries.length - 1), 1);
 
-    console.log(STATS);
+    // console.log(STATS);
     
     set_data();
 })

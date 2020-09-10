@@ -113,7 +113,7 @@ function apply_data_to_table(cfg){
 
     def_cfg = Object.assign(def_cfg, cfg);
 
-    console.log(def_cfg);
+    // console.log(def_cfg);
 
     if( def_cfg.id == "" || def_cfg.stats.length == 0 ){ return false; }
 
@@ -438,7 +438,7 @@ function get_params() {
 // 
 function set_url(url){
     if( !url ){ url = url = window.location.origin; }
-    console.log(url);
+    // console.log(url);
     window.history.pushState({"url":url}, document.title, url);
 }
 
@@ -454,7 +454,7 @@ function set_view(){
 
     views.forEach(function(el){ el.classList.add("hide"); });
 
-    console.log("View set to: " + view);
+    // console.log("View set to: " + view);
     
     switch( view ){
         case "country":{
