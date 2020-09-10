@@ -63,6 +63,7 @@ async function set_single_country_stats(slug){
     await fetch(`https://api.thevirustracker.com/free-api?countryTotal=${slug}`)
     .then(response => response.json())
     .then(data => {
+        console.log(data.results);
         info = data.countrydata[0].info;
         delete data.countrydata[0].info;
         total = data.countrydata[0];
@@ -89,7 +90,7 @@ async function set_single_country_stats(slug){
     // Ustawienie danych (nazwa, flaga)
     country_name.innerText = (info.title) ? info.title : "N/D";
     country_date.innerText = (days[days.length-1]) ? days[days.length-1] : "N/D";
-    country_flag.setAttribute("src", return_flag_url(info.code));
+    country_flag.setAttribute("src", return_flag_url(info.code, null, false));
 
     // // Obecne statystyki
     update_data_counter("country_infected", total.total_cases);
@@ -181,7 +182,9 @@ function set_country_list(){
 
     STATS.countries.forEach(function(el){
         let {code, title} = el;
-        html += `<li class="input-dropdown-item"><a href="#" data-set-view="country" data-params='{"slug":"${code}"}' data-value="${code} ${title}" class="input-dropdown-button"><img src="${return_flag_url(code.toLowerCase())}"/> ${title}</a></li>`;
+        if( code.toLowerCase() != "dp" ){
+            html += `<li class="input-dropdown-item"><a href="#" data-set-view="country" data-params='{"slug":"${code}"}' data-value="${code} ${title}" class="input-dropdown-button"><img src="${return_flag_url(code.toLowerCase())}"/> ${title}</a></li>`;
+        }
     });
 
     country_list.innerHTML = html;
@@ -274,21 +277,21 @@ async function init_stats(){
     let countries = null;
     let global = null;
 
-    // await fetch("https://api.covid19api.com/summary")
-
     await fetch("https://api.thevirustracker.com/free-api?global=stats")
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => {
+        data = clear_json(data);
         global = data.results[0];
     })
-    .catch(err => console.error("ERR: init_stats global", err));
+    .catch(err => console.error("API ERROR: init_stats global |", err));
     
     await fetch("https://api.thevirustracker.com/free-api?countryTotals=ALL")
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => {
+        data = clear_json(data);
         countries = data.countryitems[0];
     })
-    .catch(err => console.error("ERR: init_stats countries", err));
+    .catch(err => console.error("API ERROR: init_stats countries |", err));
 
     return {
         "countries": json2array(countries),

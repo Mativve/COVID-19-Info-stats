@@ -12,7 +12,8 @@ In addition, I added a contrast change (currently without localStorage) and some
 * Global Statistics
 * List of the most infected country
 * List of the least infected country
-* Statistics for a single country
+* Statistics for a single country (zoomable)
+* Highlighted country on map
 * Light and dark version
 * Country search engine
 * Eye protection - experimental

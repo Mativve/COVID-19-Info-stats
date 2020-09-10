@@ -21,19 +21,43 @@ function randid(prefix) {
 // 
 // Return flag
 // 
-function return_flag_url(slug){
+function return_flag_url(slug, callback, check){
     slug = slug.toLowerCase();
     let url = `https://www.countryflags.io/${slug}/flat/64.png`;
 
-    let image = new Image();
-    image.src = url;
-
-    if( image.width == 0 ){
-        image = null;
-        return "img/empty.png";
+    if( check ){
+        let image = new Image();
+        image.src = url;
+        image.onload = function(){
+            let u = "";
+            if( image.width == 0 ){
+                image = null;
+                u = "img/empty.png";
+            }
+            else{
+                u = url;
+            }
+    
+            if( typeof(callback) === "function" ){
+                callback(u);
+            }
+        };
     }
     else{
         return url;
+    }
+}
+
+function lazy_flag_init(){
+    let lazy = document.querySelectorAll('[data-lazy-flag]');
+    if( lazy.length > 0 ){
+        lazy.forEach(function(el){
+            let slug = el.dataset.lazyFlag;
+            
+            return_flag_url(slug, function(url){
+                el.setAttribute("src", url);
+            }, true);
+        });
     }
 }
 
@@ -129,20 +153,22 @@ function apply_data_to_table(cfg){
 
     def_cfg.stats.forEach(function(el, i){
         let {title, code, total_new_cases_today, total_cases, total_new_deaths_today, total_deaths, total_recovered} = el;
-        let classes = "";
+        if( code.toLowerCase() != "dp" ){
+            let classes = "";
 
-        classes += (def_cfg.random && picked_ids.indexOf(i) === -1) ? " hide" : "";
-        classes += (def_cfg.small) ? " small" : "";
+            classes += (def_cfg.random && picked_ids.indexOf(i) === -1) ? " hide" : "";
+            classes += (def_cfg.small) ? " small" : "";
 
-        html += `<div class="table-row ${classes}" data-sort-id="${(i+1)}" data-sort-name="${title}" data-sort-infected="${total_new_cases_today}" data-sort-deaths="${total_new_deaths_today}" data-sort-recovered="${total_recovered}">`;
-            html += `<div class="table-el city">`;
-                html += `<img src="${return_flag_url(code.toLowerCase())}" alt="${title}" class="icon">`;
-                html += `<span><button class="btn-link" data-set-view="country" data-params='{"slug":"${code}"}'>${title}</button></span>`;
+            html += `<div class="table-row ${classes}" data-sort-id="${(i+1)}" data-sort-name="${title}" data-sort-infected="${total_new_cases_today}" data-sort-deaths="${total_new_deaths_today}" data-sort-recovered="${total_recovered}">`;
+                html += `<div class="table-el city">`;
+                    html += `<img src="" data-lazy-flag="${code.toLowerCase()}" alt="${title}" class="icon">`;
+                    html += `<span><button class="btn-link" data-set-view="country" data-params='{"slug":"${code}"}'>${title}</button></span>`;
+                html += `</div>`;
+                html += `<div class="table-el infected">${total_cases} <small>(+${total_new_cases_today})</small></div>`;
+                html += `<div class="table-el deaths">${total_deaths} <small>(+${total_new_deaths_today})</small></div>`;
+                html += `<div class="table-el recovered">${total_recovered}</div>`;
             html += `</div>`;
-            html += `<div class="table-el infected">${total_cases} <small>(+${total_new_cases_today})</small></div>`;
-            html += `<div class="table-el deaths">${total_deaths} <small>(+${total_new_deaths_today})</small></div>`;
-            html += `<div class="table-el recovered">${total_recovered}</div>`;
-        html += `</div>`;
+        }
     });
 
     let table = document.getElementById(def_cfg.id);
@@ -152,6 +178,8 @@ function apply_data_to_table(cfg){
     else{
         console.error("Table " + id + " not exist");
     }
+
+    lazy_flag_init();
 }
 
 
@@ -508,7 +536,7 @@ function update_set_view_triggers(){
                 });
             }
 
-            set_url(window.location.origin + "?v=" + view + params_uri);
+            set_url(window.location.origin + window.location.pathname + "?v=" + view + params_uri);
             set_view();
 
             e.preventDefault();
@@ -584,3 +612,23 @@ theme_switch.addEventListener('click', function(){
 
     set_theme();
 });
+
+
+// 
+// Clear JSON
+// 
+let regex = /<br \/>((?:.*?\r?\n?)*)<br \/>/gmi;
+function clear_json(res){
+    let r = res;
+    r = r.replace(regex, '');
+    r = r.replace(regex, '');
+
+    try{
+        r = JSON.parse(r);
+    }
+    catch(err){
+        console.log( err );
+    }
+
+    return r;
+}
