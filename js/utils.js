@@ -21,19 +21,38 @@ function randid(prefix) {
 // 
 // Return flag
 // 
-function return_flag_url(slug){
+function return_flag_url(slug, callback){
     slug = slug.toLowerCase();
     let url = `https://www.countryflags.io/${slug}/flat/64.png`;
 
     let image = new Image();
     image.src = url;
+    image.onload = function(){
+        let u = "";
+        if( image.width == 0 ){
+            image = null;
+            u = "img/empty.png";
+        }
+        else{
+            u = url;
+        }
 
-    if( image.width == 0 ){
-        image = null;
-        return "img/empty.png";
-    }
-    else{
-        return url;
+        if( typeof(callback) === "function" ){
+            callback(u);
+        }
+    };
+}
+
+function lazy_flag_init(){
+    let lazy = document.querySelectorAll('[data-lazy-flag]');
+    if( lazy.length > 0 ){
+        lazy.forEach(function(el){
+            let slug = el.dataset.lazyFlag;
+            
+            return_flag_url(slug, function(url){
+                el.setAttribute("src", url);
+            });
+        });
     }
 }
 
@@ -136,7 +155,7 @@ function apply_data_to_table(cfg){
 
         html += `<div class="table-row ${classes}" data-sort-id="${(i+1)}" data-sort-name="${title}" data-sort-infected="${total_new_cases_today}" data-sort-deaths="${total_new_deaths_today}" data-sort-recovered="${total_recovered}">`;
             html += `<div class="table-el city">`;
-                html += `<img src="${return_flag_url(code.toLowerCase())}" alt="${title}" class="icon">`;
+                html += `<img src="" data-lazy-flag="${code.toLowerCase()}" alt="${title}" class="icon">`;
                 html += `<span><button class="btn-link" data-set-view="country" data-params='{"slug":"${code}"}'>${title}</button></span>`;
             html += `</div>`;
             html += `<div class="table-el infected">${total_cases} <small>(+${total_new_cases_today})</small></div>`;
@@ -152,6 +171,8 @@ function apply_data_to_table(cfg){
     else{
         console.error("Table " + id + " not exist");
     }
+
+    lazy_flag_init();
 }
 
 
