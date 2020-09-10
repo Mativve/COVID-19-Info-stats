@@ -61,8 +61,9 @@ async function set_single_country_stats(slug){
     let info, total, timeline, days;
     // await fetch(`https://api.covid19api.com/total/country/${slug}?from=2020-01-01T00:00:00Z`)
     await fetch(`https://api.thevirustracker.com/free-api?countryTotal=${slug}`)
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => {
+        data = clear_json(data);
         console.log(data.results);
         info = data.countrydata[0].info;
         delete data.countrydata[0].info;
@@ -70,8 +71,9 @@ async function set_single_country_stats(slug){
     });
 
     await fetch(`https://api.thevirustracker.com/free-api?countryTimeline=${slug}`)
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => {
+        data = clear_json(data);
         data = data.timelineitems;
 
         days = Object.keys(data[0]);

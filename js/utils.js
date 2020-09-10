@@ -617,11 +617,12 @@ theme_switch.addEventListener('click', function(){
 // 
 // Clear JSON
 // 
-let regex = /<br \/>((?:.*?\r?\n?)*)<br \/>/gmi;
+let regex = /<br \/>(.*?\n?)*<br \/>/gmi;
 function clear_json(res){
     let r = res;
-    r = r.replace(regex, '');
-    r = r.replace(regex, '');
+    // r = r.replace(/(\r\n|\n|\r)/gm, '');
+    // // r = r.replace(regex, '');
+    // console.log(r);
 
     try{
         r = JSON.parse(r);
