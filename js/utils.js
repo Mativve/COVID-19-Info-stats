@@ -4,6 +4,9 @@ let apperance = {
     "dark_theme": false
 };
 
+const date_options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour12: false, hour: '2-digit', minute: '2-digit' };
+const date_short_options = { day: '2-digit', month: '2-digit', year: 'numeric'};
+
 // 
 // Options for countup
 // 
@@ -137,7 +140,7 @@ function apply_data_to_table(cfg){
 
     def_cfg = Object.assign(def_cfg, cfg);
 
-    // console.log(def_cfg);
+    console.log(def_cfg);
 
     if( def_cfg.id == "" || def_cfg.stats.length == 0 ){ return false; }
 
@@ -152,21 +155,22 @@ function apply_data_to_table(cfg){
     }
 
     def_cfg.stats.forEach(function(el, i){
-        let {title, code, total_new_cases_today, total_cases, total_new_deaths_today, total_deaths, total_recovered} = el;
+        // let {title, code, total_new_cases_today, total_cases, total_new_deaths_today, total_deaths, total_recovered} = el;
+        let {name, code, new_cases, cases, new_deaths, deaths, recovered} = el;
         if( code.toLowerCase() != "dp" ){
             let classes = "";
 
             classes += (def_cfg.random && picked_ids.indexOf(i) === -1) ? " hide" : "";
             classes += (def_cfg.small) ? " small" : "";
 
-            html += `<div class="table-row ${classes}" data-sort-id="${(i+1)}" data-sort-name="${title}" data-sort-infected="${total_new_cases_today}" data-sort-deaths="${total_new_deaths_today}" data-sort-recovered="${total_recovered}">`;
+            html += `<div class="table-row ${classes}" data-sort-id="${(i+1)}" data-sort-name="${name}" data-sort-infected="${new_cases}" data-sort-deaths="${new_deaths}" data-sort-recovered="${recovered}">`;
                 html += `<div class="table-el city">`;
-                    html += `<img src="" data-lazy-flag="${code.toLowerCase()}" alt="${title}" class="icon">`;
-                    html += `<span><button class="btn-link" data-set-view="country" data-params='{"slug":"${code}"}'>${title}</button></span>`;
+                    html += `<img src="" data-lazy-flag="${code.toLowerCase()}" alt="${name}" class="icon">`;
+                    html += `<span><button class="btn-link" data-set-view="country" data-params='{"slug":"${code}"}'>${name}</button></span>`;
                 html += `</div>`;
-                html += `<div class="table-el infected">${total_cases} <small>(+${total_new_cases_today})</small></div>`;
-                html += `<div class="table-el deaths">${total_deaths} <small>(+${total_new_deaths_today})</small></div>`;
-                html += `<div class="table-el recovered">${total_recovered}</div>`;
+                html += `<div class="table-el infected">${cases} <small>(+${new_cases})</small></div>`;
+                html += `<div class="table-el deaths">${deaths} <small>(+${new_deaths})</small></div>`;
+                html += `<div class="table-el recovered">${recovered}</div>`;
             html += `</div>`;
         }
     });
@@ -263,7 +267,7 @@ function get_top_min_by_prop(arr, prop, max, allowZero = true){
 
     if( !allowZero ){
         sorted = sorted.filter((item)=>{
-            return item.total_cases > 0;
+            return item[prop] > 0;
         });
     }
 
@@ -294,6 +298,7 @@ let country_chart = document.getElementById("country_chart");
 let country_chart_ctx = country_chart.getContext('2d');
 let chart = null;
 function set_chart(stats){
+    console.log(stats);
     let i = stats.confirmed || null;
     let d = stats.deaths || null;
     let r = stats.recovered || null;
@@ -374,44 +379,6 @@ function set_chart(stats){
                 tooltips:{
                     mode: 'index',
                     axis: 'y'
-                },
-                plugins: {
-                    zoom: {
-                        // Container for pan options
-                        pan: {
-                            // Boolean to enable panning
-                            enabled: true,
-                            mode: 'xy',
-                
-                            rangeMin: {
-                                x: null,
-                                y: null
-                            },
-                            rangeMax: {
-                                x: null,
-                                y: null
-                            },
-                            speed: 20,
-                            threshold: 10
-                        },
-                        zoom: {
-                            enabled: true,
-                            drag: false,
-                            mode: 'xy',
-                
-                            rangeMin: {
-                                x: null,
-                                y: null
-                            },
-                            rangeMax: {
-                                x: null,
-                                y: null
-                            },
-                            speed: 0.1,
-                            threshold: 2,
-                            sensitivity: 3,
-                        }
-                    }
                 }
             }
         });
