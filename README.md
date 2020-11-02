@@ -1,7 +1,7 @@
 # COVID Info & Stats
 
 ## Demo
-[Click here to preview](https://mativve.github.io/covid-info-and-stats/)
+[Click here to preview](https://mativve.github.io/COVID-19-Info-stats/)
 
 ## Idea and creation process
 Due to the pandemic and publicly available APIs, I decided to create my application with up-to-date data. In the beginning, there were supposed to be statistics only. At some point I decided to change the way of operation a little and I made the appropriate 'views' thanks to which instead of one huge page we have separate statistics, a single country and an information page.
