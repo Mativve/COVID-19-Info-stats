@@ -657,14 +657,47 @@ small, .small {
 .single-country-header .date {
   margin-left: auto;
 }
-.single-country .flag-wrapper, .single-country .country, .single-country .date, .single-country [data-counter=country_infected],
-.single-country [data-counter=country_deaths], .single-country [data-counter=country_recovered],
-.single-country [data-counter=country_infected_today], .single-country [data-counter=country_deaths_today],
-.single-country #country_chart {
+.single-country .flag-wrapper:after, .single-country .country:after, .single-country .date:after, .single-country [data-counter=country_infected]:after,
+.single-country [data-counter=country_deaths]:after, .single-country [data-counter=country_recovered]:after,
+.single-country [data-counter=country_infected_today]:after, .single-country [data-counter=country_deaths_today]:after,
+.single-country #country_chart:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
   -webkit-transition: all 0.4s ease;
   -o-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
+.single-country.reload .flag-wrapper:after, .single-country.reload .country:after, .single-country.reload .date:after, .single-country.reload [data-counter=country_infected]:after,
+.single-country.reload [data-counter=country_deaths]:after, .single-country.reload [data-counter=country_recovered]:after,
+.single-country.reload [data-counter=country_infected_today]:after, .single-country.reload [data-counter=country_deaths_today]:after,
+.single-country.reload #country_chart:after {
+  background-color: #f2f3f8;
+  color: transparent;
+  -webkit-animation: shimmer 1s infinite linear;
+          animation: shimmer 1s infinite linear;
+  background: -webkit-gradient(linear, left top, right top, color-stop(4%, #eff1f3), color-stop(25%, #e2e2e2), color-stop(36%, #eff1f3));
+  background: -o-linear-gradient(left, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
+  background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
+  background-size: 200% 100%;
+}
+.single-country.reload .flag-wrapper img, .single-country.reload .country img, .single-country.reload .date img, .single-country.reload [data-counter=country_infected] img,
+.single-country.reload [data-counter=country_deaths] img, .single-country.reload [data-counter=country_recovered] img,
+.single-country.reload [data-counter=country_infected_today] img, .single-country.reload [data-counter=country_deaths_today] img,
+.single-country.reload #country_chart img {
+  opacity: 0;
+}
+.single-country.reload .flag-wrapper canvas, .single-country.reload .country canvas, .single-country.reload .date canvas, .single-country.reload [data-counter=country_infected] canvas,
+.single-country.reload [data-counter=country_deaths] canvas, .single-country.reload [data-counter=country_recovered] canvas,
+.single-country.reload [data-counter=country_infected_today] canvas, .single-country.reload [data-counter=country_deaths_today] canvas,
+.single-country.reload #country_chart canvas {
+  opacity: 0;
+}
+
 @-webkit-keyframes shimmer {
   0% {
     background-position: 100% 0;
@@ -673,6 +706,7 @@ small, .small {
     background-position: -100% 0;
   }
 }
+
 @keyframes shimmer {
   0% {
     background-position: 100% 0;

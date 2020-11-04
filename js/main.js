@@ -63,7 +63,8 @@ async function set_single_country_stats(slug){
 
     info = STATS.countries.find((el) => { return (el.code == slug); });
 
-    await fetch(`https://covid19-api.org/api/timeline/${slug}`)
+    // await fetch(`https://covid19-api.org/api/timeline/${slug}`)
+    await fetch(`https://mtve.ct8.pl/c19/?type=timeline&country=${slug}`)
     .then(response => response.json())
     .then(data => {
         console.log(data);
@@ -134,7 +135,7 @@ async function set_single_country_stats(slug){
     timeline.forEach(function(el){
         latest.confirmed.push(el.cases);
         latest.deaths.push(el.deaths);
-        latest.recovered.push(el.recoveries);
+        latest.recovered.push(el.recovered);
     });
 
     set_chart(latest);
@@ -290,7 +291,8 @@ async function init_stats(){
     .catch(err => console.error("JSON ERROR: countries |", err));
 
 
-    await fetch("https://covid19-api.org/api/status")
+    // await fetch("https://covid19-api.org/api/status")
+    await fetch("https://mtve.ct8.pl/c19/?type=status")
     .then(response => response.json())
     .then(data => {
         global = data;
@@ -298,7 +300,8 @@ async function init_stats(){
     .catch(err => console.error("API ERROR: init_stats global |", err));
 
 
-    await fetch("https://covid19-api.org/api/diff")
+    // await fetch("https://covid19-api.org/api/diff")
+    await fetch("https://mtve.ct8.pl/c19/?type=diff")
     .then(response => response.json())
     .then(data => {
         diffs = data;
