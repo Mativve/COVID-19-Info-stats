@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COVID-19 - Global statistics</title>
 
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap-grid.min.css'/>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css'/>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"> 
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap-grid.min.css'/>
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css'/>
+    <link href="//fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="styles/main.css?v=2">
 
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css'/>
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css'/>
 
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
 
     <meta property="og:title" content="COVID-19 - Global statistics"/>
-    <meta property="og:url" content="https://mativve.github.io/covid-info-and-stats/"/>
-    <meta property="og:image" content="https://mativve.github.io/covid-info-and-stats/img/og.png"/>
+    <meta property="og:url" content="//mativve.github.io/covid-info-and-stats/"/>
+    <meta property="og:image" content="//mativve.github.io/covid-info-and-stats/img/og.png"/>
     <meta property="og:description" content="Daily updated global statistics for the COVID-19 pandemic"/>
 </head>
 <body>
@@ -36,7 +36,6 @@
                     </div>
                     <ul class="main-menu">
                         <li><button class="btn-link" data-set-view="be-safe"><i class="fas fa-shield-virus"></i> Be safe!</button></li>
-                        <li><button id="safe_eye" class="btn-link"><i class="fas fa-eye"></i> Safe eye <span>(0)</span></button></li>
                         <li><button id="theme_switch" class="btn-link"><i class="fas fa-moon"></i> Switch contrast</button></li>
                     </ul>
                 </div>
@@ -53,26 +52,32 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-4">
+                    <div class="col-mds-12 col-lg-4 mb-sm-3">
                         <div class="box blue">
                             <div class="number" data-counter="global_infected">0</div>
                             <p>Infected</p>
                             <div class="icon"><i class="fas fa-virus"></i></div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-4">
+                    <div class="col-mds-12 col-lg-4 mb-sm-3">
                         <div class="box red">
                             <div class="number" data-counter="global_deaths">0</div>
                             <p>Deaths</p>
                             <div class="icon"><i class="fas fa-skull-crossbones"></i></div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-4">
+                    <div class="col-mds-12 col-lg-4 mb-sm-3">
                         <div class="box green">
                             <div class="number" data-counter="global_recovered">0</div>
                             <p>Recovered</p>
                             <div class="icon"><i class="fas fa-virus-slash"></i></div>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-end">
+                        <button class="btn-link" data-widget="global" data-widget-size="big"><i class="fas fa-crop-alt"></i> Get big widget</button>
+                        <button class="btn-link" data-widget="global" data-widget-size="small"><i class="fas fa-crop-alt"></i> Get small widget</button>
                     </div>
                 </div>
             </div>
@@ -152,14 +157,19 @@
         <section class="section single-country" id="single-country">
             <div class="container">
                 <div class="row mb-3">
-                    <div class="col-12">
+                    <div class="col-12 d-flex justify-content-between">
                         <button class="btn-link" data-set-view="main"><i class="fas fa-long-arrow-alt-left"></i> Back to main page</button>
+
+                        <div>
+                            <button class="btn-link" data-widget="country" data-widget-size="big"><i class="fas fa-crop-alt"></i> Get big widget</button>
+                            <button class="btn-link" data-widget="country" data-widget-size="small"><i class="fas fa-crop-alt"></i> Get small widget</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row">
                     <div class="col-12">
-                        <div class="box single-country-header">
+                        <div class="box single-country-header mb-3">
                             <div class="flag-wrapper">
                                 <img src="img/empty.png" alt="" class="flag" id="country_flag">
                             </div>
@@ -170,22 +180,22 @@
                 </div>
 
                 <div class="global-stats">
-                    <div class="row mb-3">
-                        <div class="col-sm-12 col-md-4">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box blue">
                                 <div class="number" data-counter="country_infected">0</div>
                                 <p>Total Infected</p>
                                 <div class="icon"><i class="fas fa-virus"></i></div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box red">
                                 <div class="number" data-counter="country_deaths">0</div>
                                 <p>Total Deaths</p>
                                 <div class="icon"><i class="fas fa-skull-crossbones"></i></div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box green">
                                 <div class="number" data-counter="country_recovered">0</div>
                                 <p>Total Recovered</p>
@@ -194,15 +204,15 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
-                        <div class="col-sm-12 col-md-6">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 mb-3">
                             <div class="box blue">
                                 <div class="number" data-counter="country_infected_today">0</div>
                                 <p>Infected today</p>
                                 <div class="icon"><i class="fas fa-virus"></i></div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-md-6 mb-3">
                             <div class="box red">
                                 <div class="number" data-counter="country_deaths_today">0</div>
                                 <p>Deaths today</p>
@@ -212,13 +222,14 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-sm-12 col-md-8">
+                <div class="row">
+                    <div class="col-sm-12 col-md-8 mb-3">
                         <div class="box">
                             <canvas id="country_chart" width="800" height="300"></canvas>
+                            <p><small class="muted">Format date: MM/DD/YYYY</small></p>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-4">
+                    <div class="col-sm-12 col-md-4 mb-3">
                         <div class="box map" id="map">
                             <div class="map-msg">
                                 <p>Sorry but we didn't find this place.</p>
@@ -505,12 +516,17 @@
             </div>
         </div>
     </footer>
+    
+    <div class="notify" id="notify">
+        <div class="notify-content">
+            <p>Notify!</p>
+        </div>
+    </div>
 
-    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/fetch/3.1.0/fetch.min.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.5/countUp.umd.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js'></script>
+    <script type="module" src="//cdnjs.cloudflare.com/ajax/libs/fetch/3.1.0/fetch.min.js"></script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.5/countUp.umd.min.js'></script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js'></script>
 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js'></script>
 
     <script src="js/utils.js?v=2"></script>
     <script src="js/main.js?v=2"></script>

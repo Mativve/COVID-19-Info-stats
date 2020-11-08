@@ -14,12 +14,45 @@ const countup_options = {
     separator: ' ',
 };
 
+
 // 
 // Generate random ID
 // 
 function randid(prefix) {
     return ((prefix) ? prefix : '_') + Math.random().toString(36).substr(2, 9);
 }
+
+// 
+// Notify
+// 
+let notify_el = document.getElementById("notify");
+function notify(type, content, time){
+    notify_el.className = "notify";
+
+    if( type ){
+        notify_el.className = "notify " + type;
+    }
+
+    if( content ){
+        notify_el.children[0].innerHTML = content;
+    }
+
+    if( time ){
+        notify_el.classList.add("show");
+
+        setTimeout(function(){
+            notify_el.classList.remove("show");
+        }, time);
+    }
+    else{
+        notify_el.classList.add("show");
+
+        setTimeout(function(){
+            notify_el.classList.remove("show");
+        }, 3000);
+    }
+}
+
 
 // 
 // Return flag
@@ -155,8 +188,7 @@ function apply_data_to_table(cfg){
     }
 
     def_cfg.stats.forEach(function(el, i){
-        // let {title, code, total_new_cases_today, total_cases, total_new_deaths_today, total_deaths, total_recovered} = el;
-        let {name, code, new_cases, cases, new_deaths, deaths, recovered} = el;
+        let {name, code, new_cases, cases, new_deaths, deaths, new_recovered, recovered} = el;
         if( code.toLowerCase() != "dp" ){
             let classes = "";
 
@@ -164,13 +196,13 @@ function apply_data_to_table(cfg){
             classes += (def_cfg.small) ? " small" : "";
 
             html += `<div class="table-row ${classes}" data-sort-id="${(i+1)}" data-sort-name="${name}" data-sort-infected="${new_cases}" data-sort-deaths="${new_deaths}" data-sort-recovered="${recovered}">`;
-                html += `<div class="table-el city">`;
+                html += `<div class="table-el city" data-table-name="City:">`;
                     html += `<img src="" data-lazy-flag="${code.toLowerCase()}" alt="${name}" class="icon">`;
                     html += `<span><button class="btn-link" data-set-view="country" data-params='{"slug":"${code}"}'>${name}</button></span>`;
                 html += `</div>`;
-                html += `<div class="table-el infected">${cases} <small>(+${new_cases})</small></div>`;
-                html += `<div class="table-el deaths">${deaths} <small>(+${new_deaths})</small></div>`;
-                html += `<div class="table-el recovered">${recovered}</div>`;
+                html += `<div class="table-el infected" data-table-name="Infected:">${cases} <small>(+${new_cases})</small></div>`;
+                html += `<div class="table-el deaths" data-table-name="Deaths:">${deaths} <small>(+${new_deaths})</small></div>`;
+                html += `<div class="table-el recovered" data-table-name="Recovered:">${recovered} <small>(+${new_recovered})</small></div>`;
             html += `</div>`;
         }
     });
@@ -191,8 +223,8 @@ function apply_data_to_table(cfg){
 // Convert JSON to array
 // 
 function json2array(arr){
-    var result = [];
-    var keys = Object.keys(arr);
+    let result = [];
+    let keys = Object.keys(arr);
     keys.forEach(function(key){
         result.push(arr[key]);
     });
@@ -297,8 +329,34 @@ function format_date(d){
 let country_chart = document.getElementById("country_chart");
 let country_chart_ctx = country_chart.getContext('2d');
 let chart = null;
-function set_chart(stats){
-    console.log(stats);
+
+Chart.defaults.LineWithLine = Chart.defaults.line;
+Chart.controllers.LineWithLine = Chart.controllers.line.extend({
+    draw: function (ease) {
+        Chart.controllers.line.prototype.draw.call(this, ease);
+
+        if (this.chart.tooltip._active && this.chart.tooltip._active.length) {
+            let activePoint = this.chart.tooltip._active[0],
+                ctx = this.chart.ctx,
+                x = activePoint.tooltipPosition().x,
+                topY = this.chart.legend.bottom,
+                bottomY = this.chart.chartArea.bottom;
+
+            // draw line
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x, topY);
+            ctx.lineTo(x, bottomY);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#ddd';
+            ctx.stroke();
+            ctx.restore();
+        }
+    }
+});
+
+function set_chart(stats, custom){
+
     let i = stats.confirmed || null;
     let d = stats.deaths || null;
     let r = stats.recovered || null;
@@ -317,7 +375,7 @@ function set_chart(stats){
         // Set chart
         chart = new Chart(country_chart_ctx, {
             // The type of chart we want to create
-            type: 'line',
+            type: 'LineWithLine',
 
             // The data for our dataset
             data: {
@@ -325,20 +383,20 @@ function set_chart(stats){
                 datasets: [
                     {
                         label: 'Infected',
-                        backgroundColor: 'rgba(0,0,0,0)',
                         borderColor: '#0b93fb',
+                        backgroundColor: 'rgba(0,0,0,0)',
                         data: i
                     },
                     {
                         label: 'Deaths',
-                        backgroundColor: 'rgba(0,0,0,0)',
                         borderColor: '#e45253',
+                        backgroundColor: 'rgba(0,0,0,0)',
                         data: d
                     },
                     {
                         label: 'Recovered',
-                        backgroundColor: 'rgba(0,0,0,0)',
                         borderColor: '#2f7b63',
+                        backgroundColor: 'rgba(0,0,0,0)',
                         data: r
                     }
                 ]
@@ -349,37 +407,34 @@ function set_chart(stats){
                 responsive: true,
                 elements: {
                     point:{
-                        radius: 2,
-                        hoverRadius: 5,
-                        rotation: 45
+                        radius: 0,
+                        hoverRadius: 0,
                     }
                 },
                 legend:{
-                    display: true
+                    display: (custom.size != "small") ? true : false,
                 },
-                scales:{
-                    xAxes: [{
-                        afterTickToLabelConversion: function(data){
-                            var xLabels = data.ticks;
-        
-                            xLabels.forEach(function (label, i) {
-                                // if ( parseInt(label.split("/")[1]) % 2 != 1){
-                                if ( i % 3 != 1){
-                                    xLabels[i] = '';
-                                }
-                            });
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                },
-                tooltips:{
-                    mode: 'index',
-                    axis: 'y'
-                }
+                tooltips: {
+                        mode: (custom.size != "small") ? 'label' : false,
+                        axis: 'x',
+                        intersect: false
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: false,
+                        }],
+                        yAxes: [{
+                            display: (custom.size != "small") ? true : false,
+                            scaleLabel: {
+                                show: true,
+                                labelString: 'Value'
+                            },
+                            ticks: {
+                                min: 0,
+                                suggestedMax: 250,
+                            }
+                        }]
+                    }
             }
         });
     }
@@ -422,9 +477,22 @@ function zoom_to_country(target){
 function get_params() {
     url = window.location.href;
     let u = new URL(url);
-    let params = u.searchParams;
 
-    return params;
+    let params = "{";
+    let params_url = window.location.search.substr(1).split("&");
+    params_url.forEach(function (item, index) {
+        let tmp = item.split("=");
+
+        params += `"${tmp[0]}":"${tmp[1]}"`;
+
+        if( index < params_url.length-1 ){
+            params += ",";
+        }
+    });
+
+    params += "}";
+
+    return JSON.parse(params);
 }
 
 
@@ -443,17 +511,18 @@ function set_url(url){
 // 
 let set_view_triggers = document.querySelectorAll('[data-set-view]');
 let views = document.querySelectorAll('[data-view]');
-function set_view(){
+function set_view(e){
     let params = get_params();
-    let view = params.get("v");
+    console.log(params);
+    let view = (params.v) ? params.v : "main";
 
     views.forEach(function(el){ el.classList.add("hide"); });
 
-    // console.log("View set to: " + view);
+    console.log("View set to: " + view);
     
     switch( view ){
         case "country":{
-            let slug = params.get("slug");
+            let slug = (params.slug) ? params.slug : "";
             if( slug == "" ){
                 set_url("");
                 set_view();
@@ -464,6 +533,11 @@ function set_view(){
             break;
         }
         case "be-safe":{
+            e.target.classList.add("hide");
+
+            break;
+        }
+        case "widget":{
 
             break;
         }
@@ -473,6 +547,10 @@ function set_view(){
             view = "main";
 
             zoom_to_country(null);
+
+            // Reset be safe
+            document.querySelector('[data-set-view="be-safe"]').classList.remove("hide");
+
             break;
         }
     }
@@ -504,7 +582,7 @@ function update_set_view_triggers(){
             }
 
             set_url(window.location.origin + window.location.pathname + "?v=" + view + params_uri);
-            set_view();
+            set_view(e);
 
             e.preventDefault();
             return false;
@@ -548,37 +626,94 @@ function paginate_array(opt){
 }
 
 
-// 
-// Change safe eye
-// 
-let safe_eye_switch = document.getElementById("safe_eye");
-function set_safe_eye(){
-    safe_eye_switch.querySelector('span').textContent = "("+apperance.safe_eye+")";
 
-    document.body.setAttribute("data-safe-eye", apperance.safe_eye);
+// 
+// Update widget triggers
+// 
+function update_widget_triggers(){
+    widget_triggers = document.querySelectorAll('[data-widget]');
+
+    widget_triggers.forEach(function(el){
+        el.addEventListener('click', function(e){
+            e.target.setAttribute("disabled", "disabled");
+
+            let id = "";
+            if( e.target.getAttribute("id") ){
+                id = randid("copy_");
+                e.target.setAttribute("id", rid);
+            }
+            else{ id = e.target.getAttribute("id"); }
+
+            let tmp_txt = e.target.innerHTML;
+            
+            let type = e.target.getAttribute("data-widget") || false;
+            let size = e.target.getAttribute("data-widget-size") || false;
+            let country = (type == "country") ? get_params().slug : "";
+
+            let width = 0;
+            let height = 0;
+
+            let url = window.location.href.replace(window.location.search, "") + "widget/index.html";
+
+            width = (size == "small") ? 320 : 640;
+
+            if( type == "global" ){
+                height = (size == "big") ? 255 : 310;
+
+                url += `?type=global`;
+            }
+            else if( type == "country" ){
+                height = (size == "big") ? 270 : 350;
+
+                url += `?type=country&slug=${country}`;
+            }
+
+            console.log(width, height, window.location, url);
+
+            let iframe = `<iframe src="${url}" width="${width}" height="${height}" frameborder="0"></iframe>`;
+
+            if (!navigator.clipboard) {
+                notify("error", "Sorry, your web browser or device not support clipboard, try copy manually code below\n" + iframe, 10000);
+                return;
+            }
+
+            setTimeout(function(){
+                e.target.innerHTML = tmp_txt;
+                e.target.removeAttribute("disabled");
+            }, 2000);
+    
+            try {
+                navigator.clipboard.writeText(iframe);
+
+                notify("success", "Widget copy to clipboard!", 2000);
+                
+                e.target.innerHTML = "Copied!";
+            } catch (error) {
+                console.error("copy failed", error);
+            }
+        });
+    });
 }
-set_safe_eye();
-safe_eye_switch.addEventListener('click', function(){
-    apperance.safe_eye = parseInt(apperance.safe_eye) + 1;
-    if( apperance.safe_eye > 2 ){ apperance.safe_eye = 0; }
-
-    set_safe_eye();
-});
 
 
 // 
 // Change dark-theme
 // 
-let theme_switch = document.getElementById("theme_switch");
+let theme_switch = (document.getElementById("theme_switch")) ? document.getElementById("theme_switch") : false;
 function set_theme(){
     document.body.setAttribute("data-dark", apperance.dark_theme);
 }
 set_theme();
-theme_switch.addEventListener('click', function(){
-    apperance.dark_theme = !apperance.dark_theme;
 
-    set_theme();
-});
+if( theme_switch ){
+    theme_switch.addEventListener('click', function(){
+        apperance.dark_theme = !apperance.dark_theme;
+    
+        theme_switch.querySelector("i").className = (apperance.dark_theme) ? "fas fa-sun" : "fas fa-moon" ;
+    
+        set_theme();
+    });
+}
 
 
 // 

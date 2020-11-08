@@ -10,19 +10,7 @@ function find_country(value){
     if(  country_dropdown !== document.getElementById("city_search_list") ){ country_dropdown = document.getElementById("city_search_list"); }
 
     if( value.length > 0 ){
-        country_dropdown.querySelectorAll("li a").forEach(function(el){
-            let query = el.dataset.value;
-            query = query.toLowerCase();
-   
-            if( query.includes(value)  ){
-                el.parentNode.classList.remove("hide");
-                el.removeAttribute("tabindex");
-            }
-            else{
-                el.parentNode.classList.add("hide");
-                el.setAttribute("tabindex", -1);
-            }
-        });
+        set_country_list(value.toLowerCase());
     }
     else{
         country_dropdown.querySelectorAll("li a").forEach(function(el){
@@ -31,7 +19,7 @@ function find_country(value){
     }
 }
 if( search ){
-    search.addEventListener('input', function(e){
+    search.addEventListener('keyup', function(e){
         let value = e.target.value;
 
         if( value.length > 1 ){ country_dropdown.classList.add("show"); }
@@ -83,7 +71,8 @@ async function set_single_country_stats(slug){
         });
     });
     
-    console.clear();
+    // console.clear();
+    console.log("-------------------------");
     console.log("info", info);
     console.log("timeline", timeline);
     console.log("days", days);
@@ -103,7 +92,6 @@ async function set_single_country_stats(slug){
     update_data_counter("country_recovered", info.recovered);
     update_data_counter("country_infected_today", info.new_cases);
     update_data_counter("country_deaths_today", info.new_deaths);
-    update_countup();
 
     // Podjaśnienie mapki
     locations.forEach(function(el){
@@ -138,10 +126,12 @@ async function set_single_country_stats(slug){
         latest.recovered.push(el.recovered);
     });
 
-    set_chart(latest);
+    set_chart(latest, false);
 
     setTimeout(function(){
         single_country.classList.remove("reload");
+
+        update_countup();
     }, 2000);
 }
 
@@ -180,11 +170,15 @@ function set_most_least_infected_table(stats){
 // 
 // Set country list (random)
 // 
-function set_country_list(){
+function set_country_list(query){
     let country_list = document.getElementById("city_search_list");
     let html = "";
 
-    STATS.countries.forEach(function(el){
+    let founded = STATS.countries.filter((el) => {
+        return ( el.name.toLowerCase().includes(query) );
+    });
+
+    founded.forEach(function(el){
         let {code, name} = el;
         if( code.toLowerCase() != "dp" ){
             html += `<li class="input-dropdown-item"><a href="#" data-set-view="country" data-params='{"slug":"${code}"}' data-value="${code} ${name}" class="input-dropdown-button"><img src="${return_flag_url(code.toLowerCase())}"/> ${name}</a></li>`;
@@ -192,6 +186,8 @@ function set_country_list(){
     });
 
     country_list.innerHTML = html;
+
+    update_set_view_triggers();
 
     country_list.querySelectorAll("a").forEach(function(el){
         el.addEventListener('click', function(e){
@@ -263,10 +259,10 @@ function set_data(){
     // Infected list pagination
     acl_set_paginate();
 
-
-    set_country_list();
+    // set_country_list();
 
     update_set_view_triggers();
+    update_widget_triggers();
 
     update_countup();
 
