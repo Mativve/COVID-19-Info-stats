@@ -145,7 +145,6 @@ async function set_single_country_stats(slug){
         return item;
     });
 
-    console.clear();
     set_chart("country_chart", latest, false);
     set_chart("daily_infected", latest, false);
     set_chart("daily_deaths", latest, false);

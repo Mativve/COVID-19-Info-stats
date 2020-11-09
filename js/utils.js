@@ -173,8 +173,6 @@ function apply_data_to_table(cfg){
 
     def_cfg = Object.assign(def_cfg, cfg);
 
-    console.log(def_cfg);
-
     if( def_cfg.id == "" || def_cfg.stats.length == 0 ){ return false; }
 
     if( def_cfg.random ){
@@ -356,10 +354,8 @@ Chart.controllers.LineWithLine = Chart.controllers.line.extend({
 
 function set_chart(id, stats, custom){
     let chart = charts.find(el => {
-        console.log( el.canvas.getAttribute("id"), id, el.canvas.getAttribute("id") == id);
         return (el.canvas.getAttribute("id") == id);
     });
-    console.log("CHART IS: ", chart);
 
     let i = stats.confirmed || null;
     let di = stats.daily_confirmed || null;
@@ -369,10 +365,7 @@ function set_chart(id, stats, custom){
     let dr = stats.daily_recovered || null;
     let days = stats.days || null;
 
-    console.log(di);
-
     if( chart ){
-        console.log("CHART EXIST");
 
         switch( id ){
             case "country_chart":{
@@ -387,7 +380,6 @@ function set_chart(id, stats, custom){
             }
             case "daily_infected":{
                 days.pop();
-                console.log("DAYS", days);
                 chart.data.labels = days;
                 chart.data.datasets[0].data = di;
 
@@ -395,7 +387,6 @@ function set_chart(id, stats, custom){
             }
             case "daily_deaths":{
                 days.pop();
-                console.log("DAYS", days);
                 chart.data.labels = days;
                 chart.data.datasets[0].data = di;
 
@@ -403,7 +394,6 @@ function set_chart(id, stats, custom){
             }
             case "daily_recovered":{
                 days.pop();
-                console.log("DAYS", days);
                 chart.data.labels = days;
                 chart.data.datasets[0].data = di;
 
@@ -414,7 +404,6 @@ function set_chart(id, stats, custom){
         chart.update();
     }
     else{
-        console.log("CHART NO EXIST, CHART " + id + " WILL CREATED");
 
         let el_chart = document.getElementById(id);
         let el_chart_ctx = el_chart.getContext('2d');
@@ -450,7 +439,6 @@ function set_chart(id, stats, custom){
             }
             case "daily_infected":{
                 days.pop();
-                console.log("DAYS", days);
                 chart_days = days;
 
                 chart_datasets = [
@@ -466,7 +454,6 @@ function set_chart(id, stats, custom){
             }
             case "daily_deaths":{
                 days.pop();
-                console.log("DAYS", days);
                 chart_days = days;
 
                 chart_datasets = [
@@ -482,7 +469,6 @@ function set_chart(id, stats, custom){
             }
             case "daily_recovered":{
                 days.pop();
-                console.log("DAYS", days);
                 chart_days = days;
 
                 chart_datasets = [
@@ -519,7 +505,7 @@ function set_chart(id, stats, custom){
                     }
                 },
                 legend:{
-                    display: (custom.size != "small") ? true : false,
+                    display: (custom.size != "small" && chart_datasets.length > 1) ? true : false,
                 },
                 tooltips: {
                         mode: (custom.size != "small") ? 'label' : false,
@@ -621,12 +607,12 @@ let set_view_triggers = document.querySelectorAll('[data-set-view]');
 let views = document.querySelectorAll('[data-view]');
 function set_view(e){
     let params = get_params();
-    console.log(params);
+    // console.log(params);
     let view = (params.v) ? params.v : "main";
 
     views.forEach(function(el){ el.classList.add("hide"); });
 
-    console.log("View set to: " + view);
+    // console.log("View set to: " + view);
     
     switch( view ){
         case "country":{
@@ -775,8 +761,6 @@ function update_widget_triggers(){
 
                 url += `?type=country&slug=${country}`;
             }
-
-            console.log(width, height, window.location, url);
 
             let iframe = `<iframe src="${url}" width="${width}" height="${height}" frameborder="0"></iframe>`;
 
