@@ -183,6 +183,30 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box blue">
+                                <div class="number" data-counter="country_infected_today">0</div>
+                                <p>Infected today</p>
+                                <div class="icon"><i class="fas fa-virus"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            <div class="box red">
+                                <div class="number" data-counter="country_deaths_today">0</div>
+                                <p>Deaths today</p>
+                                <div class="icon"><i class="fas fa-skull-crossbones"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            <div class="box green">
+                                <div class="number" data-counter="country_recovered_today">0</div>
+                                <p>Recovered today</p>
+                                <div class="icon"><i class="fas fa-virus-slash"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            <div class="box blue">
                                 <div class="number" data-counter="country_infected">0</div>
                                 <p>Total Infected</p>
                                 <div class="icon"><i class="fas fa-virus"></i></div>
@@ -200,23 +224,6 @@
                                 <div class="number" data-counter="country_recovered">0</div>
                                 <p>Total Recovered</p>
                                 <div class="icon"><i class="fas fa-virus-slash"></i></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6 mb-3">
-                            <div class="box blue">
-                                <div class="number" data-counter="country_infected_today">0</div>
-                                <p>Infected today</p>
-                                <div class="icon"><i class="fas fa-virus"></i></div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6 mb-3">
-                            <div class="box red">
-                                <div class="number" data-counter="country_deaths_today">0</div>
-                                <p>Deaths today</p>
-                                <div class="icon"><i class="fas fa-skull-crossbones"></i></div>
                             </div>
                         </div>
                     </div>
@@ -423,6 +430,27 @@
                                     </g>
                                 </svg>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-4 mb-3">
+                        <div class="box">
+                            <canvas id="daily_infected" width="200" height="100"></canvas>
+                            <p>Daily infected</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mb-3">
+                        <div class="box">
+                            <canvas id="daily_deaths" width="200" height="100"></canvas>
+                            <p>Daily deaths</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 mb-3">
+                        <div class="box">
+                            <canvas id="daily_recovered" width="200" height="100"></canvas>
+                            <p>Daily recovered</p>
                         </div>
                     </div>
                 </div>

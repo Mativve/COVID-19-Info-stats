@@ -55,7 +55,7 @@ async function set_single_country_stats(slug){
     await fetch(`https://mtve.ct8.pl/c19/?type=timeline&country=${slug}`)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        // console.log(data);
 
         last_update = data[0].last_update;
 
@@ -72,10 +72,10 @@ async function set_single_country_stats(slug){
     });
     
     // console.clear();
-    console.log("-------------------------");
-    console.log("info", info);
-    console.log("timeline", timeline);
-    console.log("days", days);
+    // console.log("-------------------------");
+    // console.log("info", info);
+    // console.log("timeline", timeline);
+    // console.log("days", days);
 
 
     // Ustawienie danych (nazwa, flaga)
@@ -92,6 +92,7 @@ async function set_single_country_stats(slug){
     update_data_counter("country_recovered", info.recovered);
     update_data_counter("country_infected_today", info.new_cases);
     update_data_counter("country_deaths_today", info.new_deaths);
+    update_data_counter("country_recovered_today", info.new_recovered);
 
     // Podjaśnienie mapki
     locations.forEach(function(el){
@@ -115,18 +116,40 @@ async function set_single_country_stats(slug){
     // Ustaw wykres
     let latest = {
         "confirmed":[],
+        "daily_confirmed":[],
         "deaths":[],
+        "daily_deaths":[],
         "recovered":[],
+        "daily_recovered":[],
         "days": days
     };
 
-    timeline.forEach(function(el){
+    timeline.forEach(function(el, i){
         latest.confirmed.push(el.cases);
         latest.deaths.push(el.deaths);
         latest.recovered.push(el.recovered);
     });
 
-    set_chart(latest, false);
+    latest.confirmed.reduce(function(result, item){
+        latest.daily_confirmed.push( item - result );
+        return item;
+    });
+
+    latest.deaths.reduce(function(result, item){
+        latest.daily_deaths.push( item - result );
+        return item;
+    });
+
+    latest.recovered.reduce(function(result, item){
+        latest.daily_recovered.push( item - result );
+        return item;
+    });
+
+    console.clear();
+    set_chart("country_chart", latest, false);
+    set_chart("daily_infected", latest, false);
+    set_chart("daily_deaths", latest, false);
+    set_chart("daily_recovered", latest, false);
 
     setTimeout(function(){
         single_country.classList.remove("reload");
@@ -181,7 +204,7 @@ function set_country_list(query){
     founded.forEach(function(el){
         let {code, name} = el;
         if( code.toLowerCase() != "dp" ){
-            html += `<li class="input-dropdown-item"><a href="#" data-set-view="country" data-params='{"slug":"${code}"}' data-value="${code} ${name}" class="input-dropdown-button"><img src="${return_flag_url(code.toLowerCase())}"/> ${name}</a></li>`;
+            html += `<li class="input-dropdown-item"><a href="#" data-set-view="country" data-params='{"slug":"${code}"}' data-value="${code} ${name}" class="input-dropdown-button" z-index="1"><img src="${return_flag_url(code.toLowerCase())}"/> ${name}</a></li>`;
         }
     });
 
@@ -334,7 +357,7 @@ async function init_stats(){
 
     info = info.filter(el => { return (el != false); });
 
-    console.log( info );
+    // console.log( info );
 
     return {
         countries: info,
@@ -346,7 +369,7 @@ let stats = init_stats();
 stats.then(data => {
     STATS = data;
 
-    console.log(STATS);
+    // console.log(STATS);
     
     set_data();
 })

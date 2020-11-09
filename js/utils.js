@@ -326,9 +326,8 @@ function format_date(d){
 // 
 // Set chart
 // 
-let country_chart = document.getElementById("country_chart");
-let country_chart_ctx = country_chart.getContext('2d');
-let chart = null;
+
+let charts = [];
 
 Chart.defaults.LineWithLine = Chart.defaults.line;
 Chart.controllers.LineWithLine = Chart.controllers.line.extend({
@@ -355,32 +354,78 @@ Chart.controllers.LineWithLine = Chart.controllers.line.extend({
     }
 });
 
-function set_chart(stats, custom){
+function set_chart(id, stats, custom){
+    let chart = charts.find(el => {
+        console.log( el.canvas.getAttribute("id"), id, el.canvas.getAttribute("id") == id);
+        return (el.canvas.getAttribute("id") == id);
+    });
+    console.log("CHART IS: ", chart);
 
     let i = stats.confirmed || null;
+    let di = stats.daily_confirmed || null;
     let d = stats.deaths || null;
+    let dd = stats.daily_deaths || null;
     let r = stats.recovered || null;
+    let dr = stats.daily_recovered || null;
     let days = stats.days || null;
 
-    if( chart ){
-        chart.data.labels = days;
+    console.log(di);
 
-        chart.data.datasets[0].data = i;
-        chart.data.datasets[1].data = d;
-        chart.data.datasets[2].data = r;
+    if( chart ){
+        console.log("CHART EXIST");
+
+        switch( id ){
+            case "country_chart":{
+
+                chart.data.labels = days;
+
+                chart.data.datasets[0].data = i;
+                chart.data.datasets[1].data = d;
+                chart.data.datasets[2].data = r;
+
+                break;
+            }
+            case "daily_infected":{
+                days.pop();
+                console.log("DAYS", days);
+                chart.data.labels = days;
+                chart.data.datasets[0].data = di;
+
+                break;
+            }
+            case "daily_deaths":{
+                days.pop();
+                console.log("DAYS", days);
+                chart.data.labels = days;
+                chart.data.datasets[0].data = di;
+
+                break;
+            }
+            case "daily_recovered":{
+                days.pop();
+                console.log("DAYS", days);
+                chart.data.labels = days;
+                chart.data.datasets[0].data = di;
+
+                break;
+            }
+        }
 
         chart.update();
     }
     else{
-        // Set chart
-        chart = new Chart(country_chart_ctx, {
-            // The type of chart we want to create
-            type: 'LineWithLine',
+        console.log("CHART NO EXIST, CHART " + id + " WILL CREATED");
 
-            // The data for our dataset
-            data: {
-                labels: days,
-                datasets: [
+        let el_chart = document.getElementById(id);
+        let el_chart_ctx = el_chart.getContext('2d');
+
+        let chart_days;
+        let chart_datasets;
+
+        switch( id ){
+            case "country_chart":{
+                chart_days = days;
+                chart_datasets = [
                     {
                         label: 'Infected',
                         borderColor: '#0b93fb',
@@ -399,7 +444,69 @@ function set_chart(stats, custom){
                         backgroundColor: 'rgba(0,0,0,0)',
                         data: r
                     }
-                ]
+                ];
+
+                break;
+            }
+            case "daily_infected":{
+                days.pop();
+                console.log("DAYS", days);
+                chart_days = days;
+
+                chart_datasets = [
+                    {
+                        label: 'Daily infected',
+                        borderColor: '#0b93fb',
+                        backgroundColor: 'rgba(0,0,0,0)',
+                        data: di
+                    },
+                ];
+
+                break;
+            }
+            case "daily_deaths":{
+                days.pop();
+                console.log("DAYS", days);
+                chart_days = days;
+
+                chart_datasets = [
+                    {
+                        label: 'Daily deaths',
+                        borderColor: '#e45253',
+                        backgroundColor: 'rgba(0,0,0,0)',
+                        data: dd
+                    }
+                ];
+
+                break;
+            }
+            case "daily_recovered":{
+                days.pop();
+                console.log("DAYS", days);
+                chart_days = days;
+
+                chart_datasets = [
+                    {
+                        label: 'Daily recovered',
+                        borderColor: '#2f7b63',
+                        backgroundColor: 'rgba(0,0,0,0)',
+                        data: dr
+                    }
+                ];
+
+                break;
+            }
+        }
+
+        // Set chart
+        chart = new Chart(el_chart_ctx, {
+            // The type of chart we want to create
+            type: 'LineWithLine',
+
+            // The data for our dataset
+            data: {
+                labels: chart_days,
+                datasets: chart_datasets
             },
 
             // Configuration options go here
@@ -431,12 +538,13 @@ function set_chart(stats, custom){
                             },
                             ticks: {
                                 min: 0,
-                                suggestedMax: 250,
                             }
                         }]
                     }
             }
         });
+
+        charts.push(chart);
     }
 }
 
