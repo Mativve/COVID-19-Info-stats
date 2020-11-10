@@ -68,7 +68,7 @@
             latest.recovered.push(el.recovered);
         });
 
-        set_chart(latest, {size:"small"});
+        set_chart("country_chart", latest, {size:"small"});
     }
 
     async function get_data(pa){
