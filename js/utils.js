@@ -378,21 +378,7 @@ function set_chart(id, stats, custom){
 
                 break;
             }
-            case "daily_infected":{
-                days.pop();
-                chart.data.labels = days;
-                chart.data.datasets[0].data = di;
-
-                break;
-            }
-            case "daily_deaths":{
-                days.pop();
-                chart.data.labels = days;
-                chart.data.datasets[0].data = di;
-
-                break;
-            }
-            case "daily_recovered":{
+            case "daily":{
                 days.pop();
                 chart.data.labels = days;
                 chart.data.datasets[0].data = di;
@@ -437,7 +423,7 @@ function set_chart(id, stats, custom){
 
                 break;
             }
-            case "daily_infected":{
+            case "daily":{
                 days.pop();
                 chart_days = days;
 
@@ -445,37 +431,19 @@ function set_chart(id, stats, custom){
                     {
                         label: 'Daily infected',
                         borderColor: '#0b93fb',
-                        backgroundColor: 'rgba(0,0,0,0)',
+                        backgroundColor: '#0b93fb',
                         data: di
                     },
-                ];
-
-                break;
-            }
-            case "daily_deaths":{
-                days.pop();
-                chart_days = days;
-
-                chart_datasets = [
                     {
                         label: 'Daily deaths',
                         borderColor: '#e45253',
-                        backgroundColor: 'rgba(0,0,0,0)',
+                        backgroundColor: '#e45253',
                         data: dd
-                    }
-                ];
-
-                break;
-            }
-            case "daily_recovered":{
-                days.pop();
-                chart_days = days;
-
-                chart_datasets = [
+                    },
                     {
                         label: 'Daily recovered',
                         borderColor: '#2f7b63',
-                        backgroundColor: 'rgba(0,0,0,0)',
+                        backgroundColor: '#2f7b63',
                         data: dr
                     }
                 ];
@@ -487,7 +455,7 @@ function set_chart(id, stats, custom){
         // Set chart
         chart = new Chart(el_chart_ctx, {
             // The type of chart we want to create
-            type: 'LineWithLine',
+            type: (custom.type) ? custom.type : 'LineWithLine',
 
             // The data for our dataset
             data: {
@@ -499,6 +467,9 @@ function set_chart(id, stats, custom){
             options: {
                 responsive: true,
                 elements: {
+                    line: {
+                        tension: 0.4
+                    },
                     point:{
                         radius: 0,
                         hoverRadius: 0,

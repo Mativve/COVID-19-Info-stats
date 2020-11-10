@@ -145,10 +145,8 @@ async function set_single_country_stats(slug){
         return item;
     });
 
-    set_chart("country_chart", latest, false);
-    set_chart("daily_infected", latest, false);
-    set_chart("daily_deaths", latest, false);
-    set_chart("daily_recovered", latest, false);
+    set_chart("country_chart", latest, {type:'LineWithLine'});
+    set_chart("daily", latest, {type:'bar'});
 
     setTimeout(function(){
         single_country.classList.remove("reload");
