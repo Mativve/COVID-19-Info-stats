@@ -59,7 +59,8 @@ function notify(type, content, time){
 // 
 function return_flag_url(slug, callback, check){
     slug = slug.toLowerCase();
-    let url = `https://www.countryflags.io/${slug}/flat/64.png`;
+    // let url = `https://www.countryflags.io/${slug}/flat/64.png`;
+    let url = `https://flagcdn.com/w160/${slug}.png`;
 
     if( check ){
         let image = new Image();
