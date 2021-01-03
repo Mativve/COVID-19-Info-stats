@@ -2,3 +2,4 @@
 *.config
 *.scss
 cache/index.php
+cache/*
