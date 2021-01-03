@@ -7,6 +7,9 @@ let apperance = {
 const date_options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour12: false, hour: '2-digit', minute: '2-digit' };
 const date_short_options = { day: '2-digit', month: '2-digit', year: 'numeric'};
 
+// const site_url = "./cache/index.php";
+const site_url = "https://mtve.ct8.pl/c19/";
+
 // 
 // Options for countup
 // 
@@ -358,18 +361,15 @@ function set_chart(id, stats, custom){
         return (el.canvas.getAttribute("id") == id);
     });
 
-    let i = stats.confirmed || null;
-    let di = stats.daily_confirmed || null;
-    let d = stats.deaths || null;
-    let dd = stats.daily_deaths || null;
-    let r = stats.recovered || null;
-    let dr = stats.daily_recovered || null;
     let days = stats.days || null;
 
     if( chart ){
 
         switch( id ){
             case "country_chart":{
+                let i = stats.confirmed || null,
+                    d = stats.deaths || null,
+                    r = stats.recovered || null;
 
                 chart.data.labels = days;
 
@@ -380,9 +380,27 @@ function set_chart(id, stats, custom){
                 break;
             }
             case "daily":{
-                days.pop();
+                let di = stats.daily_confirmed || null,
+                    dd = stats.daily_deaths || null,
+                    dr = stats.daily_recovered || null;
+
                 chart.data.labels = days;
                 chart.data.datasets[0].data = di;
+                chart.data.datasets[1].data = dd;
+                chart.data.datasets[2].data = dr;
+
+                break;
+            }
+            case "daily_percentage":{
+                let perc_daily_confirmed = stats.confirmed.slice(Math.max(stats.confirmed.length - 20, 1)) || null,
+                    perc_daily_deaths = stats.deaths.slice(Math.max(stats.deaths.length - 20, 1)) || null,
+                    perc_daily_recovered = stats.recovered.slice(Math.max(stats.recovered.length - 20, 1)) || null;
+
+                chart.data.labels = days.slice(Math.max(days.length - 20, 1)) || null;
+
+                chart.data.datasets[0].data = perc_daily_deaths;
+                chart.data.datasets[1].data = perc_daily_confirmed;
+                chart.data.datasets[2].data = perc_daily_recovered;
 
                 break;
             }
@@ -391,15 +409,17 @@ function set_chart(id, stats, custom){
         chart.update();
     }
     else{
-
         let el_chart = document.getElementById(id);
         let el_chart_ctx = el_chart.getContext('2d');
 
-        let chart_days;
-        let chart_datasets;
+        let chart_days, chart_datasets;
 
         switch( id ){
             case "country_chart":{
+                let i = stats.confirmed || null,
+                    d = stats.deaths || null,
+                    r = stats.recovered || null;
+
                 chart_days = days;
                 chart_datasets = [
                     {
@@ -425,7 +445,10 @@ function set_chart(id, stats, custom){
                 break;
             }
             case "daily":{
-                days.pop();
+                let di = stats.daily_confirmed || null,
+                    dd = stats.daily_deaths || null,
+                    dr = stats.daily_recovered || null;
+
                 chart_days = days;
 
                 chart_datasets = [
@@ -446,6 +469,37 @@ function set_chart(id, stats, custom){
                         borderColor: '#2f7b63',
                         backgroundColor: '#2f7b63',
                         data: dr
+                    }
+                ];
+
+                break;
+            }
+            case "daily_percentage":{
+                
+                let perc_daily_confirmed = stats.confirmed.slice(Math.max(stats.confirmed.length - 20, 1)) || null,
+                perc_daily_deaths = stats.deaths.slice(Math.max(stats.deaths.length - 20, 1)) || null,
+                perc_daily_recovered = stats.recovered.slice(Math.max(stats.recovered.length - 20, 1)) || null;
+                
+                chart_days = days.slice(Math.max(days.length - 20, 1)) || null;
+
+                chart_datasets = [
+                    {
+                        label: 'Daily deaths',
+                        borderColor: '#e45253',
+                        backgroundColor: '#e45253',
+                        data: perc_daily_deaths
+                    },
+                    {
+                        label: 'Daily infected',
+                        borderColor: '#0b93fb',
+                        backgroundColor: '#0b93fb',
+                        data: perc_daily_confirmed
+                    },
+                    {
+                        label: 'Daily recovered',
+                        borderColor: '#2f7b63',
+                        backgroundColor: '#2f7b63',
+                        data: perc_daily_recovered
                     }
                 ];
 
@@ -482,11 +536,17 @@ function set_chart(id, stats, custom){
                 tooltips: {
                         mode: (custom.size != "small") ? 'label' : false,
                         axis: 'x',
-                        intersect: false
+                        intersect: false,
+                        callbacks: {
+                            label: function(tooltipItems, data) { 
+                                return (id == "daily_percentage") ? tooltipItems.yLabel + '%' : tooltipItems.yLabel;
+                            }
+                        }
                     },
                     scales: {
                         xAxes: [{
                             display: false,
+                            stacked: (custom.stacked) ? true : false
                         }],
                         yAxes: [{
                             display: (custom.size != "small") ? true : false,
@@ -496,7 +556,9 @@ function set_chart(id, stats, custom){
                             },
                             ticks: {
                                 min: 0,
-                            }
+                                suggestedMax: (id == "daily_percentage") ? 100 : 1000
+                            },
+                            stacked: (custom.stacked) ? true : false
                         }]
                     }
             }
@@ -509,8 +571,12 @@ function set_chart(id, stats, custom){
 
 // 
 // Zoom map to country
-// 
+//
+let last_target;
 function zoom_to_country(target){
+    if( last_target == target ){ return false; }
+    last_target = target;
+    
     let wrapper = document.querySelector('#map .map-inner svg');
 
     wrapper.parentNode.style = `transform: scale(1)`;
@@ -532,16 +598,16 @@ function zoom_to_country(target){
             }
         }
 
-        wrapper.style = `transform: translate(${offset_x}px, ${offset_y}px)`;
+        wrapper.style = `transform: translate(${offset_x.toFixed(2)}px, ${offset_y.toFixed(2)}px)`;
         wrapper.parentNode.style = `transform: scale(${scale.toFixed(2)});`;
-    }, 1500);
+    }, 1000);
 }
 
 // 
 // URL Params get
 // 
 function get_params() {
-    url = window.location.href;
+    const url = window.location.href;
     let u = new URL(url);
 
     let params = "{";
@@ -697,7 +763,7 @@ function paginate_array(opt){
 // Update widget triggers
 // 
 function update_widget_triggers(){
-    widget_triggers = document.querySelectorAll('[data-widget]');
+    const widget_triggers = document.querySelectorAll('[data-widget]');
 
     widget_triggers.forEach(function(el){
         el.addEventListener('click', function(e){
@@ -764,17 +830,30 @@ function update_widget_triggers(){
 // Change dark-theme
 // 
 let theme_switch = (document.getElementById("theme_switch")) ? document.getElementById("theme_switch") : false;
+function save_apperance(){ localStorage.setItem("apperance", JSON.stringify(apperance)); }
+function load_apperance(){
+    if( localStorage.getItem("apperance") ){
+        apperance = JSON.parse(localStorage.getItem("apperance"));
+    }
+    else{
+        save_apperance();
+        apperance = JSON.parse(localStorage.getItem("apperance"));
+    }
+}
+load_apperance();
+
 function set_theme(){
     document.body.setAttribute("data-dark", apperance.dark_theme);
+
+    theme_switch.querySelector("i").className = (apperance.dark_theme) ? "fas fa-sun" : "fas fa-moon" ;
 }
 set_theme();
 
 if( theme_switch ){
     theme_switch.addEventListener('click', function(){
         apperance.dark_theme = !apperance.dark_theme;
-    
-        theme_switch.querySelector("i").className = (apperance.dark_theme) ? "fas fa-sun" : "fas fa-moon" ;
-    
+
+        save_apperance();
         set_theme();
     });
 }

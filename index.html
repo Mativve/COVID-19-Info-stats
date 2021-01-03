@@ -19,7 +19,7 @@
     <meta property="og:image" content="//mativve.github.io/covid-info-and-stats/img/og.png"/>
     <meta property="og:description" content="Daily updated global statistics for the COVID-19 pandemic"/>
 </head>
-<body>
+<body data-dark="true">
     
     <header class="header">
         <div class="container">
@@ -234,7 +234,7 @@
                     <div class="col-sm-12 col-md-8 mb-3">
                         <div class="box">
                             <canvas id="country_chart" width="800" height="300"></canvas>
-                            <p><small class="muted">Format date: MM/DD/YYYY</small></p>
+                            <p class="mt-4"><small class="muted">Format date: DD/MM/YYYY</small></p>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-4 mb-3">
@@ -435,11 +435,107 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-12 mb-3">
+                <div class="row mb-3">
+                    <div class="col-12">
                         <div class="box">
-                            <canvas id="daily" width="200" height="100"></canvas>
-                            <p>Daily stats</p>
+                            <canvas id="daily" width="200" height="50"></canvas>
+                            <p class="mt-4">Daily stats</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="box">
+                            <canvas id="daily_percentage" width="200" height="50"></canvas>
+                            <p class="mt-4">Daily stats - percentage last 20 days</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="global-stats">
+                    <div class="row" id="single-country-additional">
+                        <div class="col-12 pt-4">
+                            <h2 class="section-title">Additional data</h2>
+                        </div>
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            <div class="box blue">
+                                <div class="number" data-counter="bed_avaiable">0</div>
+                                <p>Avaiable beds</p>
+                                <div class="icon"><i class="fas fa-bed"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            <div class="box red">
+                                <div class="number" data-counter="bed_occupied">0</div>
+                                <p>Occupied beds</p>
+                                <div class="icon"><i class="fas fa-bed"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            <div class="box green">
+                                <div class="number" data-counter="bed_free">0</div>
+                                <p>Free beds</p>
+                                <div class="icon"><i class="fas fa-bed"></i></div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            <div class="box blue">
+                                <div class="number" data-counter="respirators_avaiable">0</div>
+                                <p>Avaiable respirators</p>
+                                <div class="icon"><i class="fas fa-laptop-medical"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            <div class="box red">
+                                <div class="number" data-counter="respirators_occupied">0</div>
+                                <p>Occupied respirators</p>
+                                <div class="icon"><i class="fas fa-laptop-medical"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            <div class="box green">
+                                <div class="number" data-counter="respirators_free">0</div>
+                                <p>Free respirators</p>
+                                <div class="icon"><i class="fas fa-laptop-medical"></i></div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <div class="box blue">
+                                <div class="number" data-counter="in_quarantine">0</div>
+                                <p>In quarantine</p>
+                                <div class="icon"><i class="fas fa-house-user"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <div class="box blue">
+                                <div class="number" data-counter="supervision">0</div>
+                                <p>Supervision</p>
+                                <div class="icon"><i class="fas fa-search"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <div class="box green">
+                                <div class="number" data-counter="tests">0</div>
+                                <p>N<sup>o</sup> of tests done</p>
+                                <div class="icon"><i class="fas fa-vials"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <div class="box green">
+                                <div class="number" data-counter="tested_persons">0</div>
+                                <p>N<sup>o</sup> of patients tested</p>
+                                <div class="icon"><i class="fas fa-user-md"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-between">
+                            <p class="d-inline-block text-left text-muted">Last update: <span id="single-country-additional-update"></span></p>
+                            <p class="d-inline-block text-right text-muted">Source: <span id="single-country-additional-source"></span></p>
                         </div>
                     </div>
                 </div>
@@ -525,10 +621,10 @@
         <div class="container">
             <div class="row footer-inner">
                 <div class="col-sm-12 col-md-6">
-                    <p>Create with <span>❤️</span> at <span>🌑</span> by Mativve</p>
+                    <p>Create with <span>❤️</span> at <span>🌑</span> by <a href="https://github.com/mativve" target="_blank" rel="noopener noreferrer">Mativve</a></p>
                 </div>
                 <div class="col-sm-12 col-md-6 text-right">
-                    <p>Used vJS, countUp, Chartjs library</p>
+                    <p>Used vJS, countUp, Chartjs library, amChart map</p>
                 </div>
             </div>
         </div>
@@ -545,7 +641,7 @@
     <script src='//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js'></script>
 
 
-    <script src="js/utils.js?v=3"></script>
-    <script src="js/main.js?v=3"></script>
+    <script src="js/utils.min.js?v=3"></script>
+    <script src="js/main.min.js?v=3"></script>
 </body>
 </html>

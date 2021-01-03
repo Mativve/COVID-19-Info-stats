@@ -1,7 +1,7 @@
 // 
 // Search input
 // 
-let search = document.getElementById("city_search");
+const search = document.getElementById("city_search");
 let country_dropdown = document.getElementById("city_search_list");
 
 function find_country(value){
@@ -33,70 +33,107 @@ if( search ){
 // 
 // Set single country stats (single country page)
 // 
-let single_country = document.getElementById("single-country");
-let country_name = document.getElementById("country_name");
-let country_flag = document.getElementById("country_flag");
-let country_date = document.getElementById("country_date");
-let country_infected = document.getElementById("country_infected");
-let country_deaths = document.getElementById("country_deaths");
-let country_recovered = document.getElementById("country_recovered");
-let map = document.getElementById("map");
-let locations = map.querySelectorAll(`[data-countryid]`);
+const single_country = document.getElementById("single-country");
+const single_country_additional = document.getElementById("single-country-additional");
+const single_country_additional_source = document.getElementById("single-country-additional-source");
+const single_country_additional_update = document.getElementById("single-country-additional-update");
+const country_name = document.getElementById("country_name");
+const country_flag = document.getElementById("country_flag");
+const country_date = document.getElementById("country_date");
+const country_infected = document.getElementById("country_infected");
+const country_deaths = document.getElementById("country_deaths");
+const country_recovered = document.getElementById("country_recovered");
+const map = document.getElementById("map");
+const locations = map.querySelectorAll(`[data-countryid]`);
 
 async function set_single_country_stats(slug){
     single_country.classList.add("reload");
 
-    let info, timeline, days;
+    let timeline, days;
     let last_update;
 
-    info = STATS.countries.find((el) => { return (el.code == slug); });
+    const {cases, deaths, recovered, new_cases, new_deaths, new_recovered, code, name} = STATS.countries.find((el) => { return (el.code == slug); });
 
-    // await fetch(`https://covid19-api.org/api/timeline/${slug}`)
-    await fetch(`https://mtve.ct8.pl/c19/?type=timeline&country=${slug}`)
+    await fetch(site_url+`?type=timeline&country=${slug}`)
     .then(response => response.json())
     .then(data => {
-        // console.log(data);
-
         last_update = data[0].last_update;
 
         data.reverse();
 
-        timeline = data.map((el) => {
-            return {date:el.last_update, cases:el.cases, deaths:el.deaths, recovered:el.recovered};
+        timeline = data.map(({last_update, cases, deaths, recovered}) => {
+            return {date:last_update, cases:cases, deaths:deaths, recovered:recovered};
         });
 
-        days = data.map((el) => {
-            let d = new Date(el.last_update);
+        days = data.map(({last_update}) => {
+            let d = new Date(last_update);
             return d.toLocaleDateString('en-US', date_short_options);
         });
-    });
-    
-    // console.clear();
-    // console.log("-------------------------");
-    // console.log("info", info);
-    // console.log("timeline", timeline);
-    // console.log("days", days);
+        
+        // Add today
+        let today = new Date();
+        days.push( today.toLocaleDateString('en-US', date_short_options) );
 
+        if( days.length ){
+            days.forEach((el, i) => {
+                if( el ){
+                    let d = el.split("/");
+                    days[i] = `${d[1]}/${d[0]}/${d[2]}`;
+                }
+            });
+            console.log(days);
+        }
+    });
 
     // Ustawienie danych (nazwa, flaga)
-    country_name.innerText = (info.name) ? info.name : "N/D";
+    country_name.innerText = (name) ? name : "N/D";
 
     let date = new Date(last_update);
 
     country_date.innerText = (last_update) ? date.toLocaleDateString('en-US', date_options) : "N/D";
-    country_flag.setAttribute("src", return_flag_url(info.code, null, false));
+    country_flag.setAttribute("src", return_flag_url(code, null, false));
 
-    // // Obecne statystyki
-    update_data_counter("country_infected", info.cases);
-    update_data_counter("country_deaths", info.deaths);
-    update_data_counter("country_recovered", info.recovered);
-    update_data_counter("country_infected_today", info.new_cases);
-    update_data_counter("country_deaths_today", info.new_deaths);
-    update_data_counter("country_recovered_today", info.new_recovered);
+    // Obecne statystyki
+    update_data_counter("country_infected", cases);
+    update_data_counter("country_deaths", deaths);
+    update_data_counter("country_recovered", recovered);
+    update_data_counter("country_infected_today", new_cases);
+    update_data_counter("country_deaths_today", new_deaths);
+    update_data_counter("country_recovered_today", new_recovered);
+
+    // Sprawdzenie i wyświetlenie dodatkowych statystyk
+    await fetch(`${site_url}?type=additionalexist&country=${slug}`)
+    .then(response => response.json())
+    .then(({exist, source}) => {
+        single_country_additional.classList.toggle("d-none", !exist);
+
+        if( exist ){
+            single_country_additional_source.innerHTML = source;
+        }
+
+        return exist;
+    }).then(async (exist) => {
+        if( exist ){
+            await fetch(`${site_url}?type=additional&country=${slug}`)
+            .then(response => response.json())
+            .then((data) => {
+                
+                single_country_additional_update.innerHTML = data.update;
+
+                data.update = false;
+
+                Object.keys(data).forEach((el) => {
+                    if( data[el] ){
+                        update_data_counter(el, data[el]);
+                    }
+                });
+            });
+        }
+    });
 
     // Podjaśnienie mapki
     locations.forEach(function(el){
-        let check = (el.dataset.countryid == info.code || el.dataset.countryid.includes(info.name) || el.getAttribute("aria-label").includes(info.name));
+        let check = (el.dataset.countryid == code || el.dataset.countryid.includes(name) || el.getAttribute("aria-label").includes(name));
 
         if( check ){
             el.classList.add("selected");
@@ -110,7 +147,7 @@ async function set_single_country_stats(slug){
 
     let location_exist = (map.querySelectorAll('.selected').length > 0);
     map.classList.toggle("empty", !location_exist);
-    if( !location_exist ){ document.getElementById("map_redirect").setAttribute("href", `https://www.google.com/maps/place/Country ${info.name}`); }
+    if( !location_exist ){ document.getElementById("map_redirect").setAttribute("href", `https://www.google.com/maps/place/Country ${name}`); }
     else{ zoom_to_country( document.querySelector('#map .map-inner svg .selected') ); }
 
     // Ustaw wykres
@@ -124,10 +161,10 @@ async function set_single_country_stats(slug){
         "days": days
     };
 
-    timeline.forEach(function(el, i){
-        latest.confirmed.push(el.cases);
-        latest.deaths.push(el.deaths);
-        latest.recovered.push(el.recovered);
+    timeline.forEach(function({cases, deaths, recovered}, i){
+        latest.confirmed.push(cases);
+        latest.deaths.push(deaths);
+        latest.recovered.push(recovered);
     });
 
     latest.confirmed.reduce(function(result, item){
@@ -145,14 +182,35 @@ async function set_single_country_stats(slug){
         return item;
     });
 
-    set_chart("country_chart", latest, {type:'LineWithLine'});
+
+    // Percentage
+    let percentage = {
+        "confirmed":[],
+        "deaths":[],
+        "recovered":[],
+        "days": days
+    };
+    latest.daily_confirmed.forEach((el, i) => {
+        let mx = latest.daily_confirmed[i] + latest.daily_deaths[i] + latest.daily_recovered[i];
+
+        percentage.confirmed.push( ((latest.daily_confirmed[i] / mx) * 100).toFixed(2) );
+        percentage.deaths.push( ((latest.daily_deaths[i] / mx) * 100).toFixed(2) );
+        percentage.recovered.push( ((latest.daily_recovered[i] / mx) * 100).toFixed(2) );
+    });
+
+    percentage.confirmed.pop();
+    percentage.deaths.pop();
+    percentage.recovered.pop();
+    percentage.days.pop();
+    console.log(percentage);
+
     set_chart("daily", latest, {type:'bar'});
+    set_chart("daily_percentage", percentage, {type:'bar', stacked: true});
+    set_chart("country_chart", latest, {type:'LineWithLine'});
 
-    setTimeout(function(){
-        single_country.classList.remove("reload");
+    single_country.classList.remove("reload");
 
-        update_countup();
-    }, 2000);
+    update_countup();
 }
 
 
@@ -307,8 +365,7 @@ async function init_stats(){
     .catch(err => console.error("JSON ERROR: countries |", err));
 
 
-    // await fetch("https://covid19-api.org/api/status")
-    await fetch("https://mtve.ct8.pl/c19/?type=status")
+    await fetch(`${site_url}?type=status`)
     .then(response => response.json())
     .then(data => {
         global = data;
@@ -316,8 +373,7 @@ async function init_stats(){
     .catch(err => console.error("API ERROR: init_stats global |", err));
 
 
-    // await fetch("https://covid19-api.org/api/diff")
-    await fetch("https://mtve.ct8.pl/c19/?type=diff")
+    await fetch(`${site_url}?type=diff`)
     .then(response => response.json())
     .then(data => {
         diffs = data;
