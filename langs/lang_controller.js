@@ -49,7 +49,7 @@ function set_lang_el(el, {cat, target}){
     if( lang_cache.lang[cat] ){
         let txt = lang_cache.lang[cat];
 
-        console.info(`[lang_cache][${cat}] founded!`);
+        // console.info(`[lang_cache][${cat}] founded!`);
 
         switch( target ){
             default:
