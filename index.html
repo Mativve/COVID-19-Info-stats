@@ -27,58 +27,64 @@
                 <div class="col-12 header-inner">
                     <div class="logo">
                         <h1><i class="fas fa-virus"></i> COVID-19</h1>
-                        <p>Global statistics</p>
+                        <p data-lang="slogan">Global statistics</p>
                     </div>
+                    
                     <div class="search input-group input-group-icon">
-                        <input type="search" id="city_search" placeholder="Search country..." class="input-control">
-                        <ul class="input-dropdown" id="city_search_list">
+                        <input type="search" id="city_search" placeholder="Search country..." class="input-control" data-lang="search_country" data-lang-target="placeholder">
+                        <ul class="input-dropdown" id="city_search_list" role="listbox" tabindex="0">
                         </ul>
                         <i class="fas fa-search input-icon"></i>
                     </div>
+
                     <ul class="main-menu">
-                        <li><button class="btn-link" data-set-view="be-safe"><i class="fas fa-shield-virus"></i> Be safe!</button></li>
-                        <li><button id="theme_switch" class="btn-link"><i class="fas fa-moon"></i> Switch contrast</button></li>
+                        <li><button class="btn-link" data-set-view="be-safe"><i class="fas fa-shield-virus"></i> <span data-lang="be_safe">Be safe!</span></button></li>
+                        <li><button id="theme_switch" class="btn-link"><i class="fas fa-moon"></i> <span data-lang="contrast">Switch contrast</span></button></li>
                     </ul>
                 </div>
             </div>
         </div>
     </header>
 
+    <div class="lang-panel"> 
+        <button class="btn-link lang-activator"></button>
+    </div>
+
     <div data-view="main">
         <section class="section global-stats">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="section-title">Global statistics</h2>
+                        <h2 class="section-title" data-lang="global_stats">Global statistics</h2>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-mds-12 col-lg-4 mb-sm-3">
                         <div class="box blue">
                             <div class="number" data-counter="global_infected">0</div>
-                            <p>Infected</p>
+                            <p data-lang="infected">Infected</p>
                             <div class="icon"><i class="fas fa-virus"></i></div>
                         </div>
                     </div>
                     <div class="col-mds-12 col-lg-4 mb-sm-3">
                         <div class="box red">
                             <div class="number" data-counter="global_deaths">0</div>
-                            <p>Deaths</p>
+                            <p data-lang="deaths">Deaths</p>
                             <div class="icon"><i class="fas fa-skull-crossbones"></i></div>
                         </div>
                     </div>
                     <div class="col-mds-12 col-lg-4 mb-sm-3">
                         <div class="box green">
                             <div class="number" data-counter="global_recovered">0</div>
-                            <p>Recovered</p>
+                            <p data-lang="recovered">Recovered</p>
                             <div class="icon"><i class="fas fa-virus-slash"></i></div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex justify-content-end">
-                        <button class="btn-link" data-widget="global" data-widget-size="big"><i class="fas fa-crop-alt"></i> Get big widget</button>
-                        <button class="btn-link" data-widget="global" data-widget-size="small"><i class="fas fa-crop-alt"></i> Get small widget</button>
+                        <button class="btn-link" data-widget="global" data-widget-size="big"><i class="fas fa-crop-alt"></i> <span data-lang="get_big_widget">Get big widget</span></button>
+                        <button class="btn-link" data-widget="global" data-widget-size="small"><i class="fas fa-crop-alt"></i> <span data-lang="get_small_widget">Get small widget</span></button>
                     </div>
                 </div>
             </div>
@@ -88,29 +94,29 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12 col-md-6 most-country">
-                        <h2 class="section-title">The most infected in country</h2>
+                        <h2 class="section-title" data-lang="the_most_infected_country">The most infected in country</h2>
     
                         <div class="bg-white">
                             <div class="table" id="most_infected_country_table">
                                 <div class="table-row table-head">
-                                    <div class="table-el city">City</div>
-                                    <div class="table-el infected">Infected</div>
-                                    <div class="table-el deaths">Deaths</div>
-                                    <div class="table-el recovered">Recovered</div>
+                                    <div class="table-el city" data-lang="flag"><span>City</span></div>
+                                    <div class="table-el infected" data-lang="infected"><span>Infected</span></div>
+                                    <div class="table-el deaths" data-lang="deaths"><span>Deaths</span></div>
+                                    <div class="table-el recovered" data-lang="recovered"><span>Recovered</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-6 least-country">
-                        <h2 class="section-title">The least infected in country</h2>
+                        <h2 class="section-title" data-lang="the_least_infected_country">The least infected in country</h2>
     
                         <div class="bg-white">
                             <div class="table" id="least_infected_country_table">
                                 <div class="table-row table-head">
-                                    <div class="table-el city">City</div>
-                                    <div class="table-el infected">Infected</div>
-                                    <div class="table-el deaths">Deaths</div>
-                                    <div class="table-el recovered">Recovered</div>
+                                    <div class="table-el city" data-lang="flag"><span>City</span></div>
+                                    <div class="table-el infected" data-lang="infected"><span>Infected</span></div>
+                                    <div class="table-el deaths" data-lang="deaths"><span>Deaths</span></div>
+                                    <div class="table-el recovered" data-lang="recovered"><span>Recovered</span></div>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +129,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="section-title">All infected cities</h2>
+                        <h2 class="section-title" data-lang="all_infected_countries">All infected countries</h2>
                         <div class="box">
                             <div class="table-pagination">
                                 <ul>
@@ -134,10 +140,10 @@
                             </div>
                             <div class="table" id="infected-list">
                                 <div class="table-row table-head">
-                                    <div class="table-el city">City</div>
-                                    <div class="table-el infected">Infected</div>
-                                    <div class="table-el deaths">Deaths</div>
-                                    <div class="table-el recovered">Recovered</div>
+                                    <div class="table-el city" data-lang="flag"><span>City</span></div>
+                                    <div class="table-el infected" data-lang="infected"><span>Infected</span></div>
+                                    <div class="table-el deaths" data-lang="deaths"><span>Deaths</span></div>
+                                    <div class="table-el recovered" data-lang="recovered"><span>Recovered</span></div>
                                 </div>
                             </div>
                             <div class="table-pagination">
@@ -159,11 +165,11 @@
             <div class="container">
                 <div class="row mb-3">
                     <div class="col-12 d-flex justify-content-between">
-                        <button class="btn-link" data-set-view="main"><i class="fas fa-long-arrow-alt-left"></i> Back to main page</button>
+                        <button class="btn-link" data-set-view="main"><i class="fas fa-long-arrow-alt-left"></i> <span data-lang="back_to_main">Back to main page</span></button>
 
                         <div>
-                            <button class="btn-link" data-widget="country" data-widget-size="big"><i class="fas fa-crop-alt"></i> Get big widget</button>
-                            <button class="btn-link" data-widget="country" data-widget-size="small"><i class="fas fa-crop-alt"></i> Get small widget</button>
+                            <button class="btn-link" data-widget="country" data-widget-size="big"><i class="fas fa-crop-alt"></i> <span data-lang="get_big_widget">Get big widget</span></button>
+                            <button class="btn-link" data-widget="country" data-widget-size="small"><i class="fas fa-crop-alt"></i> <span data-lang="get_small_widget">Get small widget</span></button>
                         </div>
                     </div>
                 </div>
@@ -175,7 +181,7 @@
                                 <img src="img/empty.png" alt="" class="flag" id="country_flag">
                             </div>
                             <p class="country" id="country_name">-</p>
-                            <p class="date"><i class="fas fa-clock"></i> Last update: <span id="country_date">-</span></p>
+                            <p class="date"><i class="fas fa-clock"></i> <span data-lang="last_update"></span>: <span id="country_date">-</span></p>
                         </div>
                     </div>
                 </div>
@@ -185,21 +191,21 @@
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box blue">
                                 <div class="number" data-counter="country_infected_today">0</div>
-                                <p>Infected today</p>
+                                <p><span data-lang="infected">Infected</span> <span data-lang="today">today</span></p>
                                 <div class="icon"><i class="fas fa-virus"></i></div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box red">
                                 <div class="number" data-counter="country_deaths_today">0</div>
-                                <p>Deaths today</p>
+                                <p><span data-lang="deaths">Deaths</span> <span data-lang="today">today</span></p>
                                 <div class="icon"><i class="fas fa-skull-crossbones"></i></div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box green">
                                 <div class="number" data-counter="country_recovered_today">0</div>
-                                <p>Recovered today</p>
+                                <p><span data-lang="recovered">Recovered</span> <span data-lang="today">today</span></p>
                                 <div class="icon"><i class="fas fa-virus-slash"></i></div>
                             </div>
                         </div>
@@ -209,21 +215,21 @@
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box blue">
                                 <div class="number" data-counter="country_infected">0</div>
-                                <p>Total Infected</p>
+                                <p><span data-lang="infected">Infected</span> <span data-lang="total">total</span></p>
                                 <div class="icon"><i class="fas fa-virus"></i></div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box red">
                                 <div class="number" data-counter="country_deaths">0</div>
-                                <p>Total Deaths</p>
+                                <p><span data-lang="deaths">Deaths</span> <span data-lang="total">total</span></p>
                                 <div class="icon"><i class="fas fa-skull-crossbones"></i></div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box green">
                                 <div class="number" data-counter="country_recovered">0</div>
-                                <p>Total Recovered</p>
+                                <p><span data-lang="recovered">Recovered</span> <span data-lang="total">total</span></p>
                                 <div class="icon"><i class="fas fa-virus-slash"></i></div>
                             </div>
                         </div>
@@ -234,7 +240,6 @@
                     <div class="col-sm-12 col-md-8 mb-3">
                         <div class="box">
                             <canvas id="country_chart" width="800" height="300"></canvas>
-                            <p class="mt-4"><small class="muted">Format date: DD/MM/YYYY</small></p>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-4 mb-3">
@@ -439,7 +444,6 @@
                     <div class="col-12">
                         <div class="box">
                             <canvas id="daily" width="200" height="50"></canvas>
-                            <p class="mt-4">Daily stats</p>
                         </div>
                     </div>
                 </div>
@@ -448,7 +452,6 @@
                     <div class="col-12">
                         <div class="box">
                             <canvas id="daily_percentage" width="200" height="50"></canvas>
-                            <p class="mt-4">Daily stats - percentage last 20 days</p>
                         </div>
                     </div>
                 </div>
@@ -456,26 +459,26 @@
                 <div class="global-stats">
                     <div class="row" id="single-country-additional">
                         <div class="col-12 pt-4">
-                            <h2 class="section-title">Additional data</h2>
+                            <h2 class="section-title" data-lang="additional_data">Additional data</h2>
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box blue">
-                                <div class="number" data-counter="bed_avaiable">0</div>
-                                <p>Avaiable beds</p>
+                                <div class="number" data-counter="bed_available">0</div>
+                                <p><span data-lang="available">Available</span> <span data-lang="beds">beds</span></p>
                                 <div class="icon"><i class="fas fa-bed"></i></div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box red">
                                 <div class="number" data-counter="bed_occupied">0</div>
-                                <p>Occupied beds</p>
+                                <p><span data-lang="occupied">Occupied</span> <span data-lang="beds">beds</span></p>
                                 <div class="icon"><i class="fas fa-bed"></i></div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box green">
                                 <div class="number" data-counter="bed_free">0</div>
-                                <p>Free beds</p>
+                                <p><span data-lang="free">Free</span> <span data-lang="beds">beds</span></p>
                                 <div class="icon"><i class="fas fa-bed"></i></div>
                             </div>
                         </div>
@@ -483,22 +486,22 @@
                         
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box blue">
-                                <div class="number" data-counter="respirators_avaiable">0</div>
-                                <p>Avaiable respirators</p>
+                                <div class="number" data-counter="respirators_available">0</div>
+                                <p><span data-lang="available">Available</span> <span data-lang="respirators">respirators</span></p>
                                 <div class="icon"><i class="fas fa-laptop-medical"></i></div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box red">
                                 <div class="number" data-counter="respirators_occupied">0</div>
-                                <p>Occupied respirators</p>
+                                <p><span data-lang="occupied">Occupied</span> <span data-lang="respirators">respirators</span></p>
                                 <div class="icon"><i class="fas fa-laptop-medical"></i></div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="box green">
                                 <div class="number" data-counter="respirators_free">0</div>
-                                <p>Free respirators</p>
+                                <p><span data-lang="free">Free</span> <span data-lang="respirators">respirators</span></p>
                                 <div class="icon"><i class="fas fa-laptop-medical"></i></div>
                             </div>
                         </div>
@@ -507,35 +510,37 @@
                         <div class="col-sm-12 col-md-6 mb-3">
                             <div class="box blue">
                                 <div class="number" data-counter="in_quarantine">0</div>
-                                <p>In quarantine</p>
+                                <p data-lang="in_quarantine">In quarantine</p>
                                 <div class="icon"><i class="fas fa-house-user"></i></div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6 mb-3">
                             <div class="box blue">
                                 <div class="number" data-counter="supervision">0</div>
-                                <p>Supervision</p>
+                                <p data-lang="supervision">Supervision</p>
                                 <div class="icon"><i class="fas fa-search"></i></div>
                             </div>
                         </div>
+
+                        
                         <div class="col-sm-12 col-md-6 mb-3">
                             <div class="box green">
                                 <div class="number" data-counter="tests">0</div>
-                                <p>N<sup>o</sup> of tests done</p>
+                                <p data-lang="no_of_test_done">N<sup>o</sup> of tests done</p>
                                 <div class="icon"><i class="fas fa-vials"></i></div>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6 mb-3">
                             <div class="box green">
                                 <div class="number" data-counter="tested_persons">0</div>
-                                <p>N<sup>o</sup> of patients tested</p>
+                                <p data-lang="no_of_patients_tested">N<sup>o</sup> of patients tested</p>
                                 <div class="icon"><i class="fas fa-user-md"></i></div>
                             </div>
                         </div>
 
                         <div class="col-12 d-flex justify-content-between">
-                            <p class="d-inline-block text-left text-muted">Last update: <span id="single-country-additional-update"></span></p>
-                            <p class="d-inline-block text-right text-muted">Source: <span id="single-country-additional-source"></span></p>
+                            <p class="d-inline-block text-left text-muted"><span data-lang="last_update">Last update</span>: <span id="single-country-additional-update"></span></p>
+                            <p class="d-inline-block text-right text-muted"><span data-lang="source">Source</span>: <span id="single-country-additional-source"></span></p>
                         </div>
                     </div>
                 </div>
@@ -548,13 +553,13 @@
             <div class="container">
                 <div class="row mb-3">
                     <div class="col-12">
-                        <button class="btn-link" data-set-view="main"><i class="fas fa-long-arrow-alt-left"></i> Back to main page</button>
+                        <button class="btn-link" data-set-view="main"><i class="fas fa-long-arrow-alt-left"></i> <span data-lang="back_to_main">Back to main page</span></button>
                     </div>
                 </div>
                 
                 <div class="row be-safe-header mb-5">
                     <div class="col-sm-12 col-md-9">
-                        <h2>How to protect yourself from the <b>coronavirus?</b></h2>
+                        <h2 data-lang="how_to_protect_title">How to protect yourself from the <b>coronavirus?</b></h2>
                     </div>
                     <div class="col-sm-12 col-md-3 be-safe-header-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
@@ -571,7 +576,7 @@
                 <div class="row mb-3 global-stats">
                     <div class="col-12">
                         <div class="box reversed blue">
-                            <h2>Try to <b>disinfect your hands</b> frequently with <b>appropriate fluids</b></h2>
+                            <h2 data-lang="tip_1">Try to regularly <b>disinfect your hands</b> with appropriate <b>disinfectants</b></h2>
                             <p></p>
                             <div class="icon"><i class="fas fa-hands-wash"></i></div>
                         </div>
@@ -581,7 +586,7 @@
                 <div class="row mb-3 global-stats">
                     <div class="col-12">
                         <div class="box reversed red">
-                            <h2>If you <b>do not have a mask</b>, try to cover your face with your arm (not hand)<br/>when coughing or sneezing</h2>
+                            <h2 data-lang="tip_2">Wear a mask! If <b>you don't have a mask</b>, try to cover your mouth and nose with something (it can be, for example, a scarf) and cover your mouth and nose with your elbow when you sneeze.</h2>
                             <div class="icon"><i class="fas fa-head-side-cough"></i></div>
                         </div>
                     </div>
@@ -590,7 +595,7 @@
                 <div class="row mb-3 global-stats">
                     <div class="col-12">
                         <div class="box reversed green">
-                            <h2>Keep a <b>sufficient distance</b> from other people</h2>
+                            <h2 data-lang="tip_3">Keep <b> adequate distance </b> from other strangers</h2>
                             <div class="icon"><i class="fas fa-people-arrows"></i></div>
                         </div>
                     </div>
@@ -599,7 +604,7 @@
                 <div class="row mb-3 global-stats">
                     <div class="col-12">
                         <div class="box reversed red">
-                            <h2><b>Limit</b> greetings with a <b>handshake</b></h2>
+                            <h2 data-lang="tip_4"><b>Avoid</b> and ideally <b>exclude</b> shaking hands</h2>
                             <div class="icon"><i class="fas fa-handshake-slash"></i></div>
                         </div>
                     </div>
@@ -608,7 +613,7 @@
                 <div class="row mb-3 global-stats">
                     <div class="col-12">
                         <div class="box reversed red">
-                            <h2><b>Limit</b> flights to <b>other</b> countries</h2>
+                            <h2 data-lang="tip_5"><b>Limit movement</b> between cities/countries to the maximum</h2>
                             <div class="icon"><i class="fas fa-plane-slash"></i></div>
                         </div>
                     </div>
@@ -621,7 +626,7 @@
         <div class="container">
             <div class="row footer-inner">
                 <div class="col-sm-12 col-md-6">
-                    <p>Create with <span>❤️</span> at <span>🌑</span> by <a href="https://github.com/mativve" target="_blank" rel="noopener noreferrer">Mativve</a></p>
+                    <p><span data-lang="create_with">Create with</span> <span>❤️</span> <span data-lang="at">at</span> <span>🌑</span> <span data-lang="by">by</span> <a href="https://github.com/mativve" target="_blank" rel="noopener noreferrer">Mativve</a></p>
                 </div>
                 <div class="col-sm-12 col-md-6 text-right">
                     <p>Used vJS, countUp, Chartjs library, amChart map</p>
@@ -632,7 +637,7 @@
     
     <div class="notify" id="notify">
         <div class="notify-content">
-            <p>Notify!</p>
+            <p></p>
         </div>
     </div>
 
@@ -642,6 +647,7 @@
 
 
     <script src="js/utils.min.js?v=3"></script>
+    <script src="langs/lang_controller.js"></script>
     <script src="js/main.min.js?v=3"></script>
 </body>
 </html>

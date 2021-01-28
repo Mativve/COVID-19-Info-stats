@@ -200,7 +200,7 @@ function apply_data_to_table(cfg){
             html += `<div class="table-row ${classes}" data-sort-id="${(i+1)}" data-sort-name="${name}" data-sort-infected="${new_cases}" data-sort-deaths="${new_deaths}" data-sort-recovered="${recovered}">`;
                 html += `<div class="table-el city" data-table-name="City:">`;
                     html += `<img src="" data-lazy-flag="${code.toLowerCase()}" alt="${name}" class="icon">`;
-                    html += `<span><button class="btn-link" data-set-view="country" data-params='{"slug":"${code}"}'>${name}</button></span>`;
+                    html += `<span><button class="btn-link" data-set-view="country" data-params='{"slug":"${code}"}'>${ get_country(code) }</button></span>`;
                 html += `</div>`;
                 html += `<div class="table-el infected" data-table-name="Infected:">${cases} <small>(+${new_cases})</small></div>`;
                 html += `<div class="table-el deaths" data-table-name="Deaths:">${deaths} <small>(+${new_deaths})</small></div>`;
@@ -328,7 +328,6 @@ function format_date(d){
 // 
 // Set chart
 // 
-
 let charts = [];
 
 Chart.defaults.LineWithLine = Chart.defaults.line;
@@ -423,19 +422,19 @@ function set_chart(id, stats, custom){
                 chart_days = days;
                 chart_datasets = [
                     {
-                        label: 'Infected',
+                        label: set_lang('infected'),
                         borderColor: '#0b93fb',
                         backgroundColor: 'rgba(0,0,0,0)',
                         data: i
                     },
                     {
-                        label: 'Deaths',
+                        label: set_lang('deaths'),
                         borderColor: '#e45253',
                         backgroundColor: 'rgba(0,0,0,0)',
                         data: d
                     },
                     {
-                        label: 'Recovered',
+                        label: set_lang('recovered'),
                         borderColor: '#2f7b63',
                         backgroundColor: 'rgba(0,0,0,0)',
                         data: r
@@ -453,19 +452,19 @@ function set_chart(id, stats, custom){
 
                 chart_datasets = [
                     {
-                        label: 'Daily infected',
+                        label: set_lang('infected') + ' ' + set_lang('daily'),
                         borderColor: '#0b93fb',
                         backgroundColor: '#0b93fb',
                         data: di
                     },
                     {
-                        label: 'Daily deaths',
+                        label: set_lang('deaths') + ' ' + set_lang('daily'),
                         borderColor: '#e45253',
                         backgroundColor: '#e45253',
                         data: dd
                     },
                     {
-                        label: 'Daily recovered',
+                        label: set_lang('recovered') + ' ' + set_lang('daily'),
                         borderColor: '#2f7b63',
                         backgroundColor: '#2f7b63',
                         data: dr
@@ -484,19 +483,19 @@ function set_chart(id, stats, custom){
 
                 chart_datasets = [
                     {
-                        label: 'Daily deaths',
+                        label: set_lang('infected') + ' ' + set_lang('daily') + ' (%)',
                         borderColor: '#e45253',
                         backgroundColor: '#e45253',
                         data: perc_daily_deaths
                     },
                     {
-                        label: 'Daily infected',
+                        label: set_lang('deaths') + ' ' + set_lang('daily') + ' (%)',
                         borderColor: '#0b93fb',
                         backgroundColor: '#0b93fb',
                         data: perc_daily_confirmed
                     },
                     {
-                        label: 'Daily recovered',
+                        label: set_lang('recovered') + ' ' + set_lang('daily') + ' (%)',
                         borderColor: '#2f7b63',
                         backgroundColor: '#2f7b63',
                         data: perc_daily_recovered
@@ -665,7 +664,7 @@ function set_view(e){
             break;
         }
         case "be-safe":{
-            e.target.classList.add("hide");
+            document.querySelector('[data-set-view="be-safe"]').classList.add("hide");
 
             break;
         }
@@ -756,7 +755,6 @@ function paginate_array(opt){
 
     return to_return;
 }
-
 
 
 // 

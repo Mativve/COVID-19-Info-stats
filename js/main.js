@@ -67,30 +67,32 @@ async function set_single_country_stats(slug){
 
         days = data.map(({last_update}) => {
             let d = new Date(last_update);
-            return d.toLocaleDateString('en-US', date_short_options);
+            return d.toLocaleDateString(get_locale(), date_short_options);
         });
         
         // Add today
         let today = new Date();
-        days.push( today.toLocaleDateString('en-US', date_short_options) );
+        days.push( today.toLocaleDateString(get_locale(), date_short_options) );
 
         if( days.length ){
             days.forEach((el, i) => {
                 if( el ){
-                    let d = el.split("/");
+                    let d = el.split(/[\.|\,|\/]/g);
                     days[i] = `${d[1]}/${d[0]}/${d[2]}`;
                 }
             });
-            console.log(days);
+            // console.log(days);
         }
     });
 
     // Ustawienie danych (nazwa, flaga)
-    country_name.innerText = (name) ? name : "N/D";
+    country_name.innerText = (name) ? get_country(code) : "N/D";
+    country_name.setAttribute("data-lang", slug);
+    country_name.setAttribute("data-lang-target", "country");
 
     let date = new Date(last_update);
 
-    country_date.innerText = (last_update) ? date.toLocaleDateString('en-US', date_options) : "N/D";
+    country_date.innerText = (last_update) ? date.toLocaleDateString(get_locale(), date_options) : "N/D";
     country_flag.setAttribute("src", return_flag_url(code, null, false));
 
     // Obecne statystyki
@@ -202,7 +204,6 @@ async function set_single_country_stats(slug){
     percentage.deaths.pop();
     percentage.recovered.pop();
     percentage.days.pop();
-    console.log(percentage);
 
     set_chart("daily", latest, {type:'bar'});
     set_chart("daily_percentage", percentage, {type:'bar', stacked: true});
@@ -259,7 +260,7 @@ function set_country_list(query){
     founded.forEach(function(el){
         let {code, name} = el;
         if( code.toLowerCase() != "dp" ){
-            html += `<li class="input-dropdown-item"><a href="#" data-set-view="country" data-params='{"slug":"${code}"}' data-value="${code} ${name}" class="input-dropdown-button" z-index="1"><img src="${return_flag_url(code.toLowerCase())}"/> ${name}</a></li>`;
+            html += `<li class="input-dropdown-item"><a href="#" data-set-view="country" data-params='{"slug":"${code}"}' data-value="${code} ${ get_country(code) }" class="input-dropdown-button" z-index="1"><img src="${return_flag_url(code.toLowerCase())}"/> ${ get_country(code) }</a></li>`;
         }
     });
 
@@ -370,7 +371,7 @@ async function init_stats(){
     .then(data => {
         global = data;
     })
-    .catch(err => console.error("API ERROR: init_stats global |", err));
+    .catch(err => console.error("[API ERROR]: init_stats global |", err));
 
 
     await fetch(`${site_url}?type=diff`)
@@ -378,7 +379,7 @@ async function init_stats(){
     .then(data => {
         diffs = data;
     })
-    .catch(err => console.error("API ERROR: init_stats diffs |", err));
+    .catch(err => console.error("[API ERROR]: init_stats diffs |", err));
 
 
     // Join all data to one
