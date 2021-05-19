@@ -1,5 +1,12 @@
 # COVID Info & Stats
 
+## IMPORTANT
+Hi, unfortunately this project was suspended because data provider it no longer provides information on countries.
+For this reason, I invite you to the new version of the application based on other technologies and data providers.
+[COVID-19 Daily Stats](https://github.com/Mativve/COVID-19-Daily-Stats)
+
+If I ever find time, maybe I will revive the project :)
+
 ## Demo
 [Click here to preview](https://mativve.github.io/COVID-19-Info-stats/)
 
